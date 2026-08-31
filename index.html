@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="Sicily Booklet">
 <link rel="manifest" href="sicily-booklet.webmanifest">
 <link rel="icon" href="sicily-icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="sicily-icon.svg">
+<link rel="apple-touch-icon" href="sicily-icon-192.png">
 
 <script id="config-dati" type="application/json">{
   "adminHash": "7920caf22bfc0a4fad09f78c69c092f2db29b8d5dbd9670301e59700a4803fc8",
@@ -1669,6 +1669,7 @@ body *{font-family:var(--font-body)}
 .field-btn{border:1px solid var(--line-strong);border-radius:9px;background:var(--paper2);color:var(--ink);font:600 13px "Spectral",serif;padding:9px 11px;cursor:pointer;text-decoration:none}
 .field-btn.primary{background:var(--ink);color:#fff8ec;border-color:var(--ink)}
 .field-btn[disabled]{opacity:.45;cursor:default}
+.install-hint{margin:0;color:var(--ink-soft);font-size:12px;line-height:1.35;text-align:center}
 .contact-panel{position:absolute;inset:0;z-index:80;display:none;align-items:flex-end;background:rgba(23,49,62,.48);padding:18px}
 .contact-panel.on{display:flex}.contact-card{width:100%;background:var(--paper2);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
 .contact-card h3{font-family:"Fraunces",serif;font-weight:500;margin:0 0 6px}.contact-card p{margin:0 0 14px;color:var(--ink-soft);font-size:14px}
@@ -2076,7 +2077,9 @@ ol.plan li::before{
         <select class="field-btn" id="voiceChoice" aria-label="Listening language"><option value="en-US" selected>English (US)</option><option value="it-IT">Italiano</option></select>
         <button class="field-btn" id="btnTodayHome">Go to today</button>
         <button class="field-btn primary" id="btnContactHome">Contact guide</button>
+        <button class="field-btn primary" id="btnInstall" hidden>Install app</button>
       </div>
+      <p class="install-hint" id="installHint" hidden></p>
     </div>
 
     <div class="home-foot">
@@ -3162,6 +3165,31 @@ function improveAccessibility(){
   Object.entries(labels).forEach(([id,label])=>{const node=$('#'+id);if(node)node.setAttribute('aria-label',label);});
 }
 improveAccessibility();
+let deferredInstallPrompt=null;
+function setupInstallButton(){
+  const button=$("#btnInstall"),hint=$("#installHint");
+  if(!button||!hint)return;
+  const standalone=window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true;
+  if(standalone)return;
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+  if(isIOS){
+    button.hidden=false;button.textContent="Add to Home Screen";
+    hint.hidden=false;hint.textContent="On iPhone or iPad, tap this button for the Safari steps.";
+    button.onclick=()=>sysAlert("In Safari, tap Share (the square with the up arrow), then choose ‘Add to Home Screen’ and confirm Add.","Add to Home Screen");
+  }
+  window.addEventListener("beforeinstallprompt",event=>{
+    event.preventDefault();deferredInstallPrompt=event;button.hidden=false;button.textContent="Install app";
+    hint.hidden=false;hint.textContent="Install Sicily Booklet for quick, full-screen access and offline reading.";
+  });
+  button.addEventListener("click",async()=>{
+    if(!deferredInstallPrompt)return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt=null;button.hidden=true;hint.hidden=true;
+  });
+  window.addEventListener("appinstalled",()=>{deferredInstallPrompt=null;button.hidden=true;hint.hidden=true;});
+}
+setupInstallButton();
 if('serviceWorker' in navigator && window.isSecureContext){navigator.serviceWorker.register('sicily-booklet-sw.js').then(()=>navigator.serviceWorker.ready).then(reg=>{if(reg.active)reg.active.postMessage({type:'CACHE_URL',url:location.href});}).catch(()=>{});}
 refreshHome();
 showResumePrompt();
