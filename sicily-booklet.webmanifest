@@ -1,0 +1,18 @@
+{
+  "name": "Sicily Travel Booklet",
+  "short_name": "Sicily Booklet",
+  "description": "A day-by-day Sicily travel booklet and recipe guide.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3eddf",
+  "theme_color": "#17313e",
+  "icons": [
+    {
+      "src": "sicily-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
