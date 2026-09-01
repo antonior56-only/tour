@@ -2028,7 +2028,9 @@ body *{font-family:var(--font-body)}
   .top .tbtn{width:auto;height:58px;flex:1;display:flex;flex-direction:column;justify-content:center;gap:3px;font-size:19px}
   .top .tbtn::after{content:attr(data-mobile-label);font:600 11px "Spectral",serif;letter-spacing:.01em;line-height:1}
   .top .tbtn svg{width:21px;height:21px}
-  .top #btnToday,.top #btnListen{display:none}
+  .top #btnToday{display:none}
+  .page-audio-controls{gap:6px;margin-bottom:13px;padding-bottom:11px}
+  .page-audio-controls button{flex:1;padding:7px 5px;font-size:12px}
 }
 
 .stage{flex:1;position:relative;overflow:hidden;padding:14px}
@@ -2046,6 +2048,11 @@ body *{font-family:var(--font-body)}
 @keyframes inR{from{transform:translateX(28px) rotateY(-6deg);opacity:0}to{transform:none;opacity:1}}
 @keyframes inL{from{transform:translateX(-28px) rotateY(6deg);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.page.enter-r,.page.enter-l{animation:none}}
+.page-audio-controls{display:flex;gap:7px;align-items:center;margin:0 0 16px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+.page-audio-controls button{min-height:38px;border:1px solid var(--line-strong);border-radius:9px;background:var(--paper2);color:var(--ink);font:600 13px "Spectral",serif;padding:7px 11px;cursor:pointer}
+.page-audio-controls button[data-audio="play"]{background:var(--ink);color:#fff8ec;border-color:var(--ink)}
+.page-audio-controls button:disabled{opacity:.42;cursor:default}
+@media(max-width:620px){.page-audio-controls{gap:6px;margin-bottom:13px;padding-bottom:11px}.page-audio-controls button{flex:1;padding:7px 5px;font-size:12px}}
 
 .bottom{
   display:flex;align-items:center;gap:10px;padding:9px 14px 12px;
@@ -2321,6 +2328,7 @@ ol.plan li::before{
   #printRoot h2{font-size:19pt;break-after:avoid}
   #printRoot h3,#printRoot .kicker{break-after:avoid}
   #printRoot .guide-entry,#printRoot .info-block,#printRoot .df,#printRoot .tl,#printRoot ol.plan li,#printRoot .two-col .it,#printRoot ul.ing li{break-inside:avoid}
+  #printRoot .page-audio-controls{display:none!important}
   #printRoot .dateline,#printRoot .meals,#printRoot .extra-note,#printRoot .rnote{break-inside:avoid}
   .resume-prompt,.toast{display:none!important}
 }
@@ -2420,7 +2428,6 @@ ol.plan li::before{
       <button class="tbtn" id="btnToday" title="Go to today">●</button>
       <button class="tbtn" id="btnSearch" title="Search" data-mobile-label="Search">⌕</button>
       <button class="tbtn" id="btnContact" title="Contact guide" data-mobile-label="Guide">☎</button>
-      <button class="tbtn" id="btnListen" title="Listen to this page">🔊</button>
       <button class="tbtn" id="btnIndex" title="Menu" data-mobile-label="Menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
@@ -2494,7 +2501,7 @@ ol.plan li::before{
               <li><b>Today:</b> during the trip, choose “Go to today” for the day’s hotel, meals and activities.</li>
               <li><b>Maps:</b> tap an address in a practical guide to open directions. On Apple devices it opens Apple Maps; elsewhere it opens Google Maps.</li>
               <li><b>Contact guide:</b> use the Contact guide button to call, send a WhatsApp message or email the tour leader.</li>
-              <li><b>Text size and listening:</b> use A− / A+ for comfortable reading. Tap the speaker in the reader to listen to the current page; tap again to pause or resume.</li>
+              <li><b>Text size and listening:</b> use A− / A+ for comfortable reading. On itinerary and recipe pages, use the Play, Pause and Stop controls at the top of the page.</li>
               <li><b>Sharing:</b> each itinerary day has a Share this day button. Your device will share or copy a short summary.</li>
             </ul>
             <p>The booklet works without a connection for reading. Map links, websites, calls and WhatsApp naturally require a connection or phone service.</p>
@@ -2733,6 +2740,7 @@ function tripRange(){
   return a.getDate()+" "+MONTHS[a.getMonth()].slice(0,3)+" \u2013 "+b.getDate()+" "+MONTHS[b.getMonth()].slice(0,3)+" "+b.getFullYear();
 }
 function esc(s){return (s==null?"":String(s)).replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));}
+function pageAudioControls(){return `<div class="page-audio-controls" role="group" aria-label="Audio controls"><button type="button" data-audio="play" aria-label="Play this page">▶ Play</button><button type="button" data-audio="pause" aria-label="Pause this page">Ⅱ Pause</button><button type="button" data-audio="stop" aria-label="Stop listening to this page">■ Stop</button></div>`;}
 
 /* ============ modal system ============ */
 function sysAlert(msg,title){return new Promise(res=>{
@@ -2812,6 +2820,7 @@ function dayPage(d){
     `<div class="pg">
       <span class="kicker">Day ${d.n} of ${DATA.trip.days}</span>
       <h2>${esc(d.title)}</h2>
+      ${pageAudioControls()}
       <p class="hotel-line">${pinSvg()} ${esc(d.hotel)} &middot; ${esc(d.location)}</p>
       <div class="dateline">
         <span class="dl-day">Day ${d.n}</span>
@@ -2881,6 +2890,7 @@ function recipePage(r){
     `<div class="pg pg-recipe">
       <span class="kicker">Recipe</span>
       <h2>${esc(r.name)}</h2>
+      ${pageAudioControls()}
       ${r.servings?`<div class="servings">${esc(r.servings)}</div>`:""}
       <div class="rule"></div>
       <div class="ing-h">Ingredients</div>
@@ -3004,7 +3014,6 @@ function openDrawer(){
   addAction("Go to today",openTodayPanel);
   addAction("A−  Smaller text",()=>setReaderFont(-.1));
   addAction("A+  Larger text",()=>setReaderFont(.1));
-  addAction("Listen to this page",toggleSpeech);
   addAction("How to use this booklet",openUserGuide);
   let lastGroup=null;
   pages.forEach((p,i)=>{
@@ -3075,17 +3084,19 @@ function closeSearchPanel(){$("#searchPanel").classList.remove("on");$("#searchP
 let speechUtterance=null;
 function speechAvailable(){return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;}
 function populateVoiceChoice(){const select=$("#voiceChoice");if(!select)return;const selected=localStorage.getItem("sicilyBookletVoiceLanguage")||"en-US";select.value=selected==="it-IT"?"it-IT":"en-US";}
-function updateListenButton(){const button=$("#btnListen");if(!button)return;const active=speechAvailable()&&speechSynthesis.speaking;button.classList.toggle("listening",active);button.textContent=active?(speechSynthesis.paused?"▶":"Ⅱ"):"🔊";button.title=active?(speechSynthesis.paused?"Resume listening":"Pause listening"):"Listen to this page";button.setAttribute("aria-label",button.title);}
-function stopSpeech(){if(!speechAvailable())return;speechSynthesis.cancel();speechUtterance=null;updateListenButton();}
-function toggleSpeech(){
+function updateAudioControls(){const active=speechAvailable()&&speechSynthesis.speaking,paused=active&&speechSynthesis.paused;document.querySelectorAll(".page-audio-controls").forEach(group=>{const play=group.querySelector('[data-audio="play"]'),pause=group.querySelector('[data-audio="pause"]'),stop=group.querySelector('[data-audio="stop"]');if(play)play.disabled=active&&!paused;if(pause)pause.disabled=!active||paused;if(stop)stop.disabled=!active;});}
+function pageTextForSpeech(){const page=$("#stage .page");if(!page)return "";const copy=page.cloneNode(true);copy.querySelectorAll(".page-audio-controls").forEach(node=>node.remove());return (copy.innerText||copy.textContent||"").replace(/\s+/g," ").trim();}
+function stopSpeech(){if(!speechAvailable())return;speechSynthesis.cancel();speechUtterance=null;updateAudioControls();}
+function playSpeech(){
   if(!speechAvailable()){sysAlert("Text-to-speech is not available in this browser.","Listening unavailable");return;}
-  if(speechSynthesis.speaking){if(speechSynthesis.paused)speechSynthesis.resume();else speechSynthesis.pause();updateListenButton();return;}
-  const page=$("#stage .page");const text=(page?.innerText||"").replace(/\s+/g," ").trim();if(!text){toast("There is no page text to read");return;}
+  if(speechSynthesis.speaking&&speechSynthesis.paused){speechSynthesis.resume();updateAudioControls();return;}
+  const text=pageTextForSpeech();if(!text){toast("There is no page text to read");return;}
   stopSpeech();speechUtterance=new SpeechSynthesisUtterance(text);const chosen=$("#voiceChoice")?.value==="it-IT"?"it-IT":"en-US";speechUtterance.lang=chosen;speechUtterance.rate=.92;
   const voice=speechSynthesis.getVoices().find(item=>item.lang.toLowerCase()===chosen.toLowerCase())||speechSynthesis.getVoices().find(item=>item.lang.toLowerCase().startsWith(chosen.slice(0,2).toLowerCase()));if(voice)speechUtterance.voice=voice;
-  speechUtterance.onstart=updateListenButton;speechUtterance.onend=()=>{speechUtterance=null;updateListenButton();};speechUtterance.onerror=()=>{speechUtterance=null;updateListenButton();toast("Listening stopped");};
-  speechSynthesis.speak(speechUtterance);updateListenButton();
+  speechUtterance.onstart=updateAudioControls;speechUtterance.onend=()=>{speechUtterance=null;updateAudioControls();};speechUtterance.onerror=()=>{speechUtterance=null;updateAudioControls();toast("Listening stopped");};
+  speechSynthesis.speak(speechUtterance);updateAudioControls();
 }
+function pauseSpeech(){if(speechAvailable()&&speechSynthesis.speaking&&!speechSynthesis.paused){speechSynthesis.pause();updateAudioControls();}}
 
 /* swipe */
 (function(){
@@ -3223,14 +3234,29 @@ function updateDashboard(){
   $("#fUndo").disabled=!undoStack.length;
 }
 function qualityErrors(){
-  const errors=[];if(!String(DATA.trip.title||"").trim())errors.push("Trip title is missing.");if(!DATA.trip.startDate)errors.push("Arrival date is missing.");
+  normalizeGuideTypes();const errors=[];if(!String(DATA.trip.title||"").trim())errors.push("Trip title is missing.");if(!DATA.trip.startDate)errors.push("Arrival date is missing.");
   DATA.days.forEach(d=>{if(!String(d.title||"").trim())errors.push("Day "+d.n+" has no title.");if(!String(d.location||"").trim())errors.push("Day "+d.n+" has no location.");if(!Array.isArray(d.items)||!d.items.length)errors.push("Day "+d.n+" has no activities.");});
   DATA.recipes.forEach((r,i)=>{if(!String(r.name||"").trim())errors.push("Recipe "+(i+1)+" has no name.");});
-  allGuideEntries().forEach(x=>{if(!x.e.name||!x.e.name.trim())errors.push("A guide entry in "+x.g.city+" has no name.");[x.e.maps,x.e.website].filter(Boolean).forEach(url=>{if(!safeHttpUrl(url))errors.push("Invalid web link for "+(x.e.name||"a guide entry")+".");});});
+  allGuideEntries().forEach(x=>{if(!x.e.name||!x.e.name.trim())errors.push("A guide entry in "+x.g.city+" has no name.");if(x.e.type!=="place"&&x.e.type!=="restaurant")errors.push("Invalid type for "+(x.e.name||"a guide entry")+".");[x.e.maps,x.e.website].filter(Boolean).forEach(url=>{if(!safeHttpUrl(url))errors.push("Invalid web link for "+(x.e.name||"a guide entry")+".");});if(x.e.phone&&phoneDigits(x.e.phone).length<6)errors.push("Invalid phone number for "+(x.e.name||"a guide entry")+".");});
   return errors;
 }
+function qualityWarnings(){
+  const warnings=[],seen=new Map(),today=new Date();today.setHours(0,0,0,0);
+  allGuideEntries().forEach(x=>{const key=[x.e.type,(x.g.city||"").trim().toLowerCase(),(x.e.name||"").trim().toLowerCase()].join("|");if(x.e.name){if(seen.has(key))warnings.push("Possible duplicate: "+x.e.name+" in "+x.g.city+".");else seen.set(key,true);}if(x.e.checkedOn){const checked=parseISO(x.e.checkedOn);if(!Number.isNaN(checked.getTime())&&(today-checked)>365*86400000)warnings.push("Information for "+(x.e.name||"a guide entry")+" was last checked over one year ago.");}});
+  return [...new Set(warnings)];
+}
+function runTechnicalSelfCheck(){
+  const failures=[];
+  if(!DATA.trip||!Array.isArray(DATA.days)||!Array.isArray(DATA.recipes)||!Array.isArray(DATA.info)||!Array.isArray(DATA.reference)||!Array.isArray(DATA.guides))failures.push("The editable data structure is incomplete.");
+  ["fGenerate","fBackup","fRestore","fInfoSel","fRefSel","voiceChoice"].forEach(id=>{if(!document.getElementById(id))failures.push("Required control missing: "+id+".");});
+  if(!DATA.days.every(d=>Array.isArray(d.items)&&Array.isArray(d.notes)&&Array.isArray(d.extra)))failures.push("One or more itinerary days have an invalid structure.");
+  if(!DATA.recipes.every(r=>Array.isArray(r.ingredients)))failures.push("One or more recipes have an invalid structure.");
+  if(!DATA.guides.every(g=>Array.isArray(g.entries)&&g.entries.every(e=>e.type==="place"||e.type==="restaurant")))failures.push("One or more guide entries have no explicit type.");
+  const sample=[...buildBooklet(),...buildRecipes()].find(p=>p.group==="Day by day"||p.group==="Recipes");if(!sample||!sample.html.includes('data-audio="play"'))failures.push("Page audio controls could not be built.");
+  return {ok:!failures.length,failures};
+}
 function fillAdmin(){
-  const t=DATA.trip; $("#adminUpdated").textContent="Last updated: "+fmtLong(parseISO(DATA.aggiornatoIl));
+  normalizeGuideTypes();const t=DATA.trip; $("#adminUpdated").textContent="Last updated: "+fmtLong(parseISO(DATA.aggiornatoIl));
   $("#fStart").value=t.startDate; $("#fTitle").value=t.title; $("#fLeader").value=t.leader; $("#fPhone").value=t.phone; $("#fEmail").value=t.email; $("#fTripSubtitle").value=t.subtitle||""; $("#fTripEndLabel").value=t.endLabel||""; updateDatePreview();
   const sel=$("#fDaySel"); sel.innerHTML=""; DATA.days.forEach(d=>{const o=el("option",null,"Day "+d.n+" — "+d.title);o.value=d.n;sel.appendChild(o);});
   if(DATA.days.length)sel.value=Math.min(Number(sel.value)||1,DATA.days.length); loadDayIntoForm();
@@ -3302,8 +3328,11 @@ async function deleteRecipe(){
 function allGuideEntries(){
   const out=[]; DATA.guides.forEach((g,gi)=>g.entries.forEach((e,ei)=>out.push({g,gi,ei,e}))); return out;
 }
-function isRestaurantEntry(g,e){if(e&&e.type==='restaurant')return true;const c=(g.cat||'').toLowerCase();return /food|eat something|free time & eat|gastronomy|restaurant|pizza|dining/.test(c);}
+function legacyRestaurantCategory(category){return /food|eat something|free time & eat|gastronomy|restaurant|pizza|dining/.test(String(category||'').toLowerCase());}
+function normalizeGuideTypes(){(DATA.guides||[]).forEach(g=>(g.entries||[]).forEach(e=>{if(e.type!=="place"&&e.type!=="restaurant")e.type=legacyRestaurantCategory(g.cat)?"restaurant":"place";}));}
+function isRestaurantEntry(g,e){return e&&e.type==='restaurant';}
 function catalogEntries(kind){return allGuideEntries().filter(x=>kind==='restaurant'?isRestaurantEntry(x.g,x.e):!isRestaurantEntry(x.g,x.e));}
+normalizeGuideTypes();
 function catalogLabel(x){return (x.e.name||'Untitled')+' — '+(x.g.city||'')+' / '+(x.g.cat||'');}
 function parseImportTable(text){
   const delimiter=(text.match(/\t/g)||[]).length>(text.match(/,/g)||[]).length?"\t":",";const rows=[];let row=[],cell="",quoted=false;
@@ -3316,7 +3345,7 @@ function importCatalogList(){
   const aliases={name:["name","nome"],city:["city","city/area","area","citta","città"],category:["category","cat","categoria"],loc:["location","practical info","address","indirizzo","location/practical info"],desc:["description","desc","descrizione"],maps:["maps","google maps","map"],website:["website","site","sito"],phone:["phone","telephone","tel","telefono"]};
   const norm=s=>String(s||"").toLowerCase().trim(),header=rows[0].map(norm);const hasHeader=header.some(h=>aliases.name.includes(h));const columns={};Object.keys(aliases).forEach(key=>columns[key]=header.findIndex(h=>aliases[key].includes(h)));
   const value=(row,key,fallback)=>{const i=hasHeader?columns[key]:fallback;return i>=0?(row[i]||"").trim():"";};let added=0,skipped=0;
-  rows.slice(hasHeader?1:0).forEach(row=>{const name=value(row,"name",0);if(!name){skipped++;return;}const city=value(row,"city",1)||"New city",cat=value(row,"category",2)||(kind==="restaurant"?"Eat something":"Art & history");let group=DATA.guides.find(g=>g.city===city&&g.cat===cat);if(!group){group={city,cat,entries:[]};DATA.guides.push(group);}const entry={name,loc:value(row,"loc",3),desc:value(row,"desc",4),maps:value(row,"maps",5),website:value(row,"website",6),phone:value(row,"phone",7)};if(kind==="restaurant")entry.type="restaurant";group.entries.push(entry);added++;});
+  rows.slice(hasHeader?1:0).forEach(row=>{const name=value(row,"name",0);if(!name){skipped++;return;}const city=value(row,"city",1)||"New city",cat=value(row,"category",2)||(kind==="restaurant"?"Eat something":"Art & history");let group=DATA.guides.find(g=>g.city===city&&g.cat===cat);if(!group){group={city,cat,entries:[]};DATA.guides.push(group);}const entry={name,loc:value(row,"loc",3),desc:value(row,"desc",4),maps:value(row,"maps",5),website:value(row,"website",6),phone:value(row,"phone",7),type:kind};group.entries.push(entry);added++;});
   if(!added){toast("No valid entries found");return;}fillCatalogSelectors();$("#fImportText").value="";scheduleDraft();toast(added+" "+(kind==="restaurant"?"restaurant":"place")+(added===1?"":"s")+" imported"+(skipped?"; "+skipped+" skipped":""));
 }
 let adminNewPlace=false, adminNewRestaurant=false, adminNewWine=false;
@@ -3357,7 +3386,7 @@ function saveCatalog(kind){
   const desc=$('#f'+C+'Desc').value.trim(),maps=$('#f'+C+'Maps').value.trim(),website=$('#f'+C+'Website').value.trim(),phone=$('#f'+C+'Phone').value.trim(),checkedOn=$('#f'+C+'Checked').value;
   const isNew=(kind==='place'?adminNewPlace:adminNewRestaurant) || $('#f'+C+'Sel').value==='__new__';
   if(isNew){
-    const entry={name,loc,desc,maps,website,phone,checkedOn};if(kind==='restaurant')entry.type='restaurant';
+    const entry={name,loc,desc,maps,website,phone,checkedOn,type:kind};
     let g=DATA.guides.find(x=>x.city===city&&x.cat===cat);
     if(!g){g={city,cat,entries:[]};DATA.guides.push(g);}
     g.entries.push(entry);
@@ -3369,7 +3398,7 @@ function saveCatalog(kind){
   }
   const arr=catalogEntries(kind),idx=Number($('#f'+C+'Sel').value),x=arr[idx];
   if(!x)return false;
-  x.g.city=city;x.g.cat=cat;x.e.name=name;x.e.loc=loc;x.e.desc=desc;x.e.maps=maps;x.e.website=website;x.e.phone=phone;x.e.checkedOn=checkedOn;if(kind==='restaurant')x.e.type='restaurant';
+  x.g.city=city;x.g.cat=cat;x.e.name=name;x.e.loc=loc;x.e.desc=desc;x.e.maps=maps;x.e.website=website;x.e.phone=phone;x.e.checkedOn=checkedOn;x.e.type=kind;
   fillCatalogSelectors({[kind]:idx});
   toast((kind==='restaurant'?'Restaurant':'Place')+' saved');
   return true;
@@ -3407,7 +3436,7 @@ function saveWine(){
   return true;
 }
 function cancelCatalog(kind){if(kind==='place'&&adminNewPlace){const n=catalogEntries(kind).length;if(n)fillCatalogSelectors({place:n-1});else newPlaceForm();}else if(kind==='restaurant'&&adminNewRestaurant){const n=catalogEntries(kind).length;if(n)fillCatalogSelectors({restaurant:n-1});else newRestaurantForm();}else loadCatalogIntoForm(kind);}
-function commitCatalog(kind){if((kind==='place'&&adminNewPlace)||(kind==='restaurant'&&adminNewRestaurant))return;const C=kind[0].toUpperCase()+kind.slice(1),arr=catalogEntries(kind),idx=Number($('#f'+C+'Sel').value),x=arr[idx];if(!x)return;x.g.city=cityValue(C)||x.g.city;x.g.cat=catValue(C)||x.g.cat;x.e.name=$('#f'+C+'Name').value.trim()||x.e.name;x.e.loc=$('#f'+C+'Loc').value.trim();x.e.desc=$('#f'+C+'Desc').value.trim();x.e.maps=$('#f'+C+'Maps').value.trim();x.e.website=$('#f'+C+'Website').value.trim();x.e.phone=$('#f'+C+'Phone').value.trim();x.e.checkedOn=$('#f'+C+'Checked').value;}
+function commitCatalog(kind){if((kind==='place'&&adminNewPlace)||(kind==='restaurant'&&adminNewRestaurant))return;const C=kind[0].toUpperCase()+kind.slice(1),arr=catalogEntries(kind),idx=Number($('#f'+C+'Sel').value),x=arr[idx];if(!x)return;x.g.city=cityValue(C)||x.g.city;x.g.cat=catValue(C)||x.g.cat;x.e.name=$('#f'+C+'Name').value.trim()||x.e.name;x.e.loc=$('#f'+C+'Loc').value.trim();x.e.desc=$('#f'+C+'Desc').value.trim();x.e.maps=$('#f'+C+'Maps').value.trim();x.e.website=$('#f'+C+'Website').value.trim();x.e.phone=$('#f'+C+'Phone').value.trim();x.e.checkedOn=$('#f'+C+'Checked').value;x.e.type=kind;}
 async function deleteCatalog(kind){const C=kind[0].toUpperCase()+kind.slice(1),arr=catalogEntries(kind),idx=Number($('#f'+C+'Sel').value),x=arr[idx];if(!x)return;const ok=await sysConfirm('Delete '+kind+' “'+x.e.name+'”?','Delete '+kind,'Delete');if(!ok)return;x.g.entries.splice(x.ei,1);if(!x.g.entries.length)DATA.guides.splice(x.gi,1);fillCatalogSelectors({[kind]:Math.max(0,idx-1)});toast((kind==='restaurant'?'Restaurant':'Place')+' deleted');}
 function wineEntries(){const out=[];DATA.reference.forEach((r,ri)=>{if(r.kind!=='grapes'||!/^Sicilian local grapes — (white|red)$/.test(r.title))return;const group=r.title.endsWith('white')?'white':'red';r.items.forEach((item,ii)=>out.push({r,ri,ii,item,group}));});return out;}
 function loadWineIntoForm(){const sel=$('#fWineSel');if(sel.value==='__new__'){newWineForm();return;}const arr=wineEntries(),x=arr[Number(sel.value)];if(!x){newWineForm();return;}adminNewWine=false;$('#fWineGroup').value=x.group;$('#fWineName').value=x.item[0]||'';$('#fWineDesc').value=x.item[1]||'';}
@@ -3433,14 +3462,13 @@ $("#btnTodayHome").onclick=openTodayPanel;
 $("#btnTextDown").onclick=()=>setReaderFont(-.1);
 $("#btnTextUp").onclick=()=>setReaderFont(.1);
 $("#btnContact").onclick=openContactPanel;
-$("#btnListen").onclick=toggleSpeech;
 $("#btnContactHome").onclick=openContactPanel;
 $("#contactClose").onclick=closeContactPanel;
 $("#todayClose").onclick=closeTodayPanel;
 $("#userGuideClose").onclick=closeUserGuide;
 $("#todayPanel").addEventListener("click",e=>{if(e.target===$("#todayPanel"))closeTodayPanel();});
 $("#userGuidePanel").addEventListener("click",e=>{if(e.target===$("#userGuidePanel"))closeUserGuide();});
-$("#stage").addEventListener("click",e=>{const button=e.target.closest(".share-day");if(button)shareDay(button.dataset.day);});
+$("#stage").addEventListener("click",e=>{const button=e.target.closest(".share-day");if(button){shareDay(button.dataset.day);return;}const audio=e.target.closest("[data-audio]");if(!audio)return;if(audio.dataset.audio==="play")playSpeech();else if(audio.dataset.audio==="pause")pauseSpeech();else if(audio.dataset.audio==="stop")stopSpeech();});
 $("#voiceChoice").addEventListener("change",e=>{try{localStorage.setItem("sicilyBookletVoiceLanguage",e.target.value);}catch(err){};});
 $("#contactPanel").addEventListener("click",e=>{if(e.target===$("#contactPanel"))closeContactPanel();});
 $("#btnSearch").onclick=()=>openSearchPanel("");
@@ -3485,8 +3513,10 @@ $("#fBackupFile").addEventListener("change",e=>{const f=e.target.files?.[0];if(f
 $("#fUndo").onclick=undoLastChange;
 const generateFileCore=generateFile;
 generateFile=async function(btn){
-  try{commitTrip();commitDay();commitRecipe();commitCatalog('place');commitCatalog('restaurant');commitWine();}catch(e){}
+  try{commitTrip();commitDay();commitRecipe();commitInfo();commitRef();commitCatalog('place');commitCatalog('restaurant');commitWine();}catch(e){}
+  const health=runTechnicalSelfCheck();if(!health.ok){await sysAlert("The automatic technical test found these issues:\n\n"+health.failures.map(x=>"• "+x).join("\n"),"Technical check");return;}
   const problems=qualityErrors();if(problems.length){await sysAlert("Please correct these issues before generating the file:\n\n"+problems.slice(0,10).map(x=>"• "+x).join("\n")+(problems.length>10?"\n• and "+(problems.length-10)+" more.":""),"Quality check");return;}
+  const warnings=qualityWarnings();if(warnings.length){const proceed=await sysConfirm("The file can be generated, but please review these warnings:\n\n"+warnings.slice(0,10).map(x=>"• "+x).join("\n")+(warnings.length>10?"\n• and "+(warnings.length-10)+" more.":""),"Quality review","Generate anyway");if(!proceed)return;}
   const nativeClone=document.documentElement.cloneNode;
   document.documentElement.cloneNode=function(deep){const clone=nativeClone.call(this,deep),generatedButton=clone.querySelector("#fGenerate");if(generatedButton){generatedButton.disabled=false;generatedButton.removeAttribute("disabled");}return clone;};
   try{await generateFileCore(btn);}finally{document.documentElement.cloneNode=nativeClone;}
@@ -3537,7 +3567,7 @@ $('#fPrintRecipesStandard').onclick=()=>printBook('recipes',false);
 $('#fPrintRecipesCompact').onclick=()=>printBook('recipes',true);
 function improveAccessibility(){
   document.querySelectorAll('button[title]').forEach(button=>{if(!button.getAttribute('aria-label'))button.setAttribute('aria-label',button.title);});
-  const labels={drawerClose:'Close contents',btnToday:'Go to today',btnSearch:'Search booklet',btnContact:'Contact guide',btnListen:'Listen to this page',btnIndex:'Open menu',btnHome:'Return to Home'};
+  const labels={drawerClose:'Close contents',btnToday:'Go to today',btnSearch:'Search booklet',btnContact:'Contact guide',btnIndex:'Open menu',btnHome:'Return to Home'};
   Object.entries(labels).forEach(([id,label])=>{const node=$('#'+id);if(node)node.setAttribute('aria-label',label);});
 }
 improveAccessibility();
@@ -3566,7 +3596,8 @@ function setupInstallButton(){
   window.addEventListener("appinstalled",()=>{deferredInstallPrompt=null;button.hidden=true;hint.hidden=true;});
 }
 setupInstallButton();
-if('serviceWorker' in navigator && window.isSecureContext){navigator.serviceWorker.register('sicily-booklet-sw.js').then(()=>navigator.serviceWorker.ready).then(reg=>{if(reg.active)reg.active.postMessage({type:'CACHE_URL',url:location.href});}).catch(()=>{});}
+if('serviceWorker' in navigator && window.isSecureContext){navigator.serviceWorker.register('./sicily-booklet-sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(reg=>{if(reg.active)reg.active.postMessage({type:'CACHE_URL',url:location.href});}).catch(()=>{});}
+const initialTechnicalCheck=runTechnicalSelfCheck();if(!initialTechnicalCheck.ok)console.error("Sicily Booklet technical check:",initialTechnicalCheck.failures);
 refreshHome();
 showResumePrompt();
 </script>
