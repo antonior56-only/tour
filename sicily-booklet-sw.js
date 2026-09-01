@@ -1,12 +1,11 @@
-const CACHE_NAME = "sicily-booklet-v4";
+// The folder URL is unique for each published tour, so its offline cache is too.
+const CACHE_NAME = "sicily-booklet-cache:" + new URL(self.registration.scope).pathname;
 const CORE_FILES = ["./", "./index.html", "./sicily-booklet.webmanifest", "./sicily-icon.svg", "./sicily-icon-192.png", "./sicily-icon-512.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_FILES)).then(() => self.skipWaiting()));
 });
-self.addEventListener("activate", event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim()));
-});
+self.addEventListener("activate", event => { event.waitUntil(self.clients.claim()); });
 self.addEventListener("message", event => {
   if (event.data && event.data.type === "CACHE_URL" && event.data.url) event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.add(event.data.url)));
 });

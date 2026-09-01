@@ -18,6 +18,7 @@
 <script id="config-dati" type="application/json">{
   "adminHash": "7920caf22bfc0a4fad09f78c69c092f2db29b8d5dbd9670301e59700a4803fc8",
   "aggiornatoIl": "2026-08-27",
+  "tourId": "sicily-august-2026",
   "trip": {
     "title": "Sicily's Ancient Landscapes & Timeless Traditions",
     "subtitle": "Overseas Adventure Travel",
@@ -1994,7 +1995,7 @@ body *{font-family:var(--font-body)}
 .contact-panel{position:absolute;inset:0;z-index:80;display:none;align-items:flex-end;background:rgba(23,49,62,.48);padding:18px}
 .contact-panel.on{display:flex}.contact-card{width:100%;background:var(--paper2);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
 .contact-card h3{font-family:"Fraunces",serif;font-weight:500;margin:0 0 6px}.contact-card p{margin:0 0 14px;color:var(--ink-soft);font-size:14px}
-.note-card{position:relative}.note-card textarea{width:100%;min-height:180px;resize:vertical;font:inherit;line-height:1.45;padding:11px;border:1px solid var(--line-strong);border-radius:9px;background:#fff;color:var(--ink)}.note-card .note-status{min-height:18px;margin:8px 0 0;font-size:12px}.note-card .note-privacy{font-size:12px;line-height:1.35}.note-close-x{position:absolute;right:12px;top:12px;width:30px;height:30px;border:1px solid var(--line-strong);border-radius:7px;background:var(--paper2);color:var(--ink);font:500 22px/1 sans-serif;cursor:pointer}
+.note-card{position:relative}.note-card textarea{width:100%;min-height:180px;resize:vertical;font:inherit;line-height:1.45;padding:11px;border:1px solid var(--line-strong);border-radius:9px;background:#fff;color:var(--ink)}.note-card .note-status{min-height:18px;margin:8px 0 0;font-size:12px}.note-card .note-privacy{font-size:12px;line-height:1.35}.note-close-x{position:absolute;right:12px;top:12px;width:30px;height:30px;border:1px solid var(--line-strong);border-radius:7px;background:var(--paper2);color:var(--ink);font:500 22px/1 sans-serif;cursor:pointer}.personal-notes-list{max-height:48vh;overflow:auto;margin-top:10px}.personal-note-item{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:11px 2px;color:var(--ink);font:inherit;cursor:pointer}.personal-note-item b{display:block;font-family:"Fraunces",serif;font-weight:500}.personal-note-item span{display:block;color:var(--ink-soft);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .user-guide-copy{max-height:58vh;overflow-y:auto;padding-right:4px;font-size:14px;line-height:1.45}.user-guide-copy h5{font:500 20px var(--font-display);margin:0 0 8px}.user-guide-copy ul{padding-left:20px;margin:8px 0}.user-guide-copy li{margin:7px 0}
 .search-results{max-height:52vh;overflow:auto;margin-top:10px}.search-result{width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:11px 2px;color:var(--ink);font:inherit;cursor:pointer}.search-result b{display:block;font-family:"Fraunces",serif;font-weight:500}.search-result small{display:block;color:var(--ink-soft);font-size:12px;margin-top:2px}
 .guide-actions{display:flex;gap:7px;margin-top:8px}.guide-actions a{display:inline-grid;place-items:center;width:31px;height:31px;border:1px solid var(--line-strong);border-radius:8px;color:var(--blue);background:#fff;text-decoration:none}.guide-actions svg{width:17px;height:17px}
@@ -2053,7 +2054,7 @@ body *{font-family:var(--font-body)}
 .page-audio-controls button[data-audio="play"]{background:var(--ink);color:#fff8ec;border-color:var(--ink)}
 .page-audio-controls button:disabled{opacity:.42;cursor:default}
 @media(max-width:620px){.page-topline{gap:7px}.page-audio-controls{gap:3px}.page-audio-controls button{width:27px;height:27px;min-height:27px;font-size:12px}}
-.page-personal-tools{display:flex;justify-content:flex-end;margin:-7px 0 7px}.page-note-button{width:29px;height:29px;border:1px solid var(--line-strong);border-radius:7px;background:var(--paper2);color:var(--ink);font:600 16px "Spectral",serif;cursor:pointer}.page-topline .page-note-button{margin-left:3px;flex:0 0 auto}
+.page-personal-tools{display:flex;justify-content:flex-end;margin:-7px 0 7px}.page-note-button{position:relative;width:29px;height:29px;border:1px solid var(--line-strong);border-radius:7px;background:var(--paper2);color:var(--ink);font:600 16px "Spectral",serif;cursor:pointer}.page-note-button.has-note{color:var(--terra);border-color:var(--terra);background:#fff7ea}.page-note-button.has-note::after{content:"";position:absolute;right:3px;top:3px;width:5px;height:5px;border-radius:50%;background:var(--terra)}.page-topline .page-note-button{margin-left:3px;flex:0 0 auto}
 
 .bottom{
   display:flex;align-items:center;gap:10px;padding:9px 14px 12px;
@@ -2474,6 +2475,9 @@ ol.plan li::before{
   <div class="contact-panel" id="notePanel" aria-hidden="true">
     <div class="contact-card note-card"><button class="note-close-x" id="noteCloseX" type="button" aria-label="Close notes" title="Close">×</button><h3>My notes</h3><p class="note-privacy">These notes are private. They are saved only in this browser on this device and are never shared with the tour leader or other travellers.</p><textarea id="personalNoteText" placeholder="Write a private note for this page…"></textarea><p class="note-status" id="personalNoteStatus"></p><div class="field-actions"><button class="field-btn" id="noteDictate">🎙 Dictate</button><button class="field-btn danger" id="noteDelete">Delete note</button><button class="field-btn primary" id="noteClose">Done</button></div></div>
   </div>
+  <div class="contact-panel" id="notesIndexPanel" aria-hidden="true">
+    <div class="contact-card"><h3>My notes</h3><p>Private notes saved on this device. Choose one to return to its page.</p><div class="personal-notes-list" id="personalNotesList"></div><div class="field-actions" style="margin-top:12px"><button class="field-btn primary" id="notesIndexClose">Close</button></div></div>
+  </div>
 
   <!-- ===== ADMIN ===== -->
   <section id="admin">
@@ -2506,7 +2510,7 @@ ol.plan li::before{
               <li><b>Maps:</b> tap an address in a practical guide to open directions. On Apple devices it opens Apple Maps; elsewhere it opens Google Maps.</li>
               <li><b>Contact guide:</b> use the Contact guide button to call, send a WhatsApp message or email the tour leader.</li>
               <li><b>Text size and listening:</b> use A− / A+ for comfortable reading. On Useful info, itinerary and recipe pages, use the Play, Pause and Stop controls at the top of the page. After Pause, Play continues without needing Stop.</li>
-              <li><b>My notes:</b> tap the pencil on any page to write a personal note. Notes are private, saved only in this browser on this device, and are never shared with the tour leader or other travellers. You can type or use Dictate where supported; dictation may require an internet connection.</li>
+              <li><b>My notes:</b> tap the pencil on any page to write a personal note. A gold pencil with a dot means that page already has a saved note. If you do not remember where you wrote it, open Contents and choose <b>My notes</b> to see every saved note and return directly to its page. Notes are private, saved only in this browser on this device, and are never shared with the tour leader or other travellers. You can type or use Dictate where supported; dictation may require an internet connection.</li>
               <li><b>Sharing:</b> each itinerary day has a Share this day button. Your device will share or copy a short summary.</li>
             </ul>
             <p>The booklet works without a connection for reading and for your saved notes. Map links, websites, calls, WhatsApp and browser dictation naturally require a connection or phone service.</p>
@@ -2530,6 +2534,12 @@ ol.plan li::before{
           <ol><li>Fai un <b>Download backup</b> prima di modifiche importanti.</li><li>Controlla una pagina del booklet e una ricetta.</li><li>Usa Generate updated file: il controllo qualità blocca campi strutturalmente incompleti o link non validi.</li><li>Apri il nuovo file scaricato e verifica Home, Admin, una mappa, la stampa e il lettore vocale.</li><li>Conserva sia il nuovo HTML sia il JSON di backup. Restore backup crea prima una copia di sicurezza, poi chiede conferma.</li></ol>
           <h5>8. Stampa, uso offline e installazione</h5>
           <p>La stampa <b>standard</b> avvia ogni sezione su una pagina nuova; la <b>compact</b> riduce la carta facendo continuare le sezioni. I font sono locali, quindi la lettura e la stampa non dipendono da Google Fonts. Per installare l’app come PWA devi pubblicare HTML, manifest, service worker e icona nella stessa cartella su un sito HTTPS.</p>
+          <h5>9. Note personali dei viaggiatori</h5>
+          <p>Le note create con la matita sono <b>private</b>: restano solo nel browser del singolo viaggiatore e non sono visibili nell’Admin, non entrano nei backup del tour e non vengono inserite nel file generato. Il pulsante dorato con punto indica una nota presente; dal menu “My notes” ogni viaggiatore può ritrovarle. Non eliminare o ripristinare dati del browser del viaggiatore se desidera conservarle.</p>
+          <h5>10. Pubblicare un nuovo tour senza modificare quelli conclusi</h5>
+          <p>Per un nuovo gruppo apri l’ultima copia dell’app, aggiorna tutti i contenuti e in <b>Trip &amp; dates</b> sostituisci il <b>Unique tour code</b> con un codice mai usato, minuscolo e senza spazi: per esempio <i>sicily-may-2027</i> oppure <i>sicily-october-2027</i>. Il codice non viene mostrato ai viaggiatori: separa note personali, ripresa della lettura, preferenze e bozza Admin del nuovo tour da quelle di qualsiasi altro tour sullo stesso sito.</p>
+          <p>La separazione della cache offline e dell’app installata dipende invece dalla <b>cartella pubblicata su GitHub</b>: ogni tour deve avere una cartella e quindi un URL propri.</p>
+          <p>Poi usa <b>Generate updated file</b>. Crea sul computer una cartella con lo stesso nome del codice, ad esempio <i>sicily-may-2027</i>; rinomina il file scaricato in <b>index.html</b> e inseriscilo nella cartella insieme a <b>sicily-booklet-sw.js</b>, <b>sicily-booklet.webmanifest</b>, <b>sicily-icon-192.png</b>, <b>sicily-icon-512.png</b> e <b>sicily-icon.svg</b>. Carica quella cartella su GitHub senza modificare né eliminare la cartella del tour precedente. I partecipanti del nuovo gruppo riceveranno un URL diverso, ad esempio <i>…/sicily-may-2027/</i>; chi ha partecipato al tour precedente continuerà a vedere il proprio tour al vecchio URL.</p>
         </details>
       </div>
 
@@ -2539,6 +2549,7 @@ ol.plan li::before{
           <p class="hint">Every day recalculates automatically from this date. Day 1 is the arrival day.</p><p class="datepreview" id="datePreview"></p></div>
         <div class="admin-grid">
           <div class="fld"><label>Trip title</label><input type="text" id="fTitle"></div>
+          <div class="fld"><label>Unique tour code</label><input type="text" id="fTourId" autocomplete="off" spellcheck="false" pattern="[a-z0-9-]+" placeholder="e.g. sicily-may-2027"><p class="hint">Required for each new tour. Use lowercase letters, numbers and hyphens only; never reuse a code.</p></div>
           <div class="fld"><label>Tour leader</label><input type="text" id="fLeader"></div>
           <div class="fld"><label>Phone</label><input type="text" id="fPhone"></div>
           <div class="fld"><label>Email</label><input type="email" id="fEmail"></div>
@@ -2731,6 +2742,10 @@ ol.plan li::before{
 const CONFIG = JSON.parse(document.getElementById("config-dati").textContent);
 // working copy the admin edits; the page reads from this
 let DATA = JSON.parse(JSON.stringify(CONFIG));
+function normalizeTourId(value){return String(value||"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60);}
+function ensureTourId(data){const fallback="tour-"+String(data?.trip?.startDate||"current").replace(/[^0-9a-z]+/gi,"");data.tourId=normalizeTourId(data?.tourId)||fallback;return data.tourId;}
+const TOUR_STORAGE_ID=ensureTourId(DATA);
+const storageKey=name=>"sicilyBooklet:"+TOUR_STORAGE_ID+":"+name;
 const $ = s => document.querySelector(s);
 const el = (t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
 
@@ -2932,7 +2947,7 @@ function buildRecipes(){
 
 /* ============ reader state + browser history ============ */
 let pages=[], idx=0, curBook="booklet";
-const READER_STATE_KEY="sicilyBookletReaderState";
+const READER_STATE_KEY=storageKey("ReaderState");
 const APP_HISTORY_MARK="sicily-booklet";
 let handlingPopState=false;
 function saveReaderState(){
@@ -2978,7 +2993,7 @@ function renderPage(newIdx,dir){
   const stage=$("#stage"); stage.innerHTML="";
   const page=el("div","page"+(dir==="next"?" enter-r":dir==="prev"?" enter-l":""));
   page.innerHTML=p.html;
-  if(p.noteKey){const noteButton=el("button","page-note-button","✎");noteButton.type="button";noteButton.dataset.noteKey=p.noteKey;noteButton.dataset.noteLabel=p.label;noteButton.title="My private notes";noteButton.setAttribute("aria-label","My private notes for "+p.label);const topLine=page.querySelector(".page-topline");if(topLine)topLine.appendChild(noteButton);else{const tools=el("div","page-personal-tools");tools.appendChild(noteButton);page.prepend(tools);}}
+  if(p.noteKey){const noteButton=el("button","page-note-button","✎");noteButton.type="button";noteButton.dataset.noteKey=p.noteKey;noteButton.dataset.noteLabel=p.label;noteButton.title="My private notes";noteButton.setAttribute("aria-label","My private notes for "+p.label);const topLine=page.querySelector(".page-topline");if(topLine)topLine.appendChild(noteButton);else{const tools=el("div","page-personal-tools");tools.appendChild(noteButton);page.prepend(tools);}refreshPersonalNoteIndicator(noteButton,p.noteKey);}
   stage.appendChild(page);
   page.scrollTop=0;
   // header + footer
@@ -3020,6 +3035,7 @@ function openDrawer(){
   addAction("Go to today",openTodayPanel);
   addAction("A−  Smaller text",()=>setReaderFont(-.1));
   addAction("A+  Larger text",()=>setReaderFont(.1));
+  addAction("My notes",openPersonalNotesIndex);
   addAction("How to use this booklet",openUserGuide);
   let lastGroup=null;
   pages.forEach((p,i)=>{
@@ -3058,13 +3074,19 @@ function openUserGuide(){
   $("#userGuidePanel").classList.add("on");$("#userGuidePanel").setAttribute("aria-hidden","false");
 }
 function closeUserGuide(){$("#userGuidePanel").classList.remove("on");$("#userGuidePanel").setAttribute("aria-hidden","true");}
-const PERSONAL_NOTES_DB="sicilyBookletPersonalNotes",PERSONAL_NOTES_STORE="notes",PERSONAL_NOTES_FALLBACK="sicilyBookletPersonalNotesFallback";
+const PERSONAL_NOTES_DB=storageKey("PersonalNotes"),PERSONAL_NOTES_STORE="notes",PERSONAL_NOTES_FALLBACK=storageKey("PersonalNotesFallback");
 let personalNotesDbPromise=null,currentPersonalNoteKey="",personalNoteSaveTimer=null,noteRecognition=null;
 function personalNotesDb(){if(!("indexedDB" in window))return Promise.reject(new Error("IndexedDB is unavailable"));if(personalNotesDbPromise)return personalNotesDbPromise;personalNotesDbPromise=new Promise((resolve,reject)=>{const request=indexedDB.open(PERSONAL_NOTES_DB,1);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(PERSONAL_NOTES_STORE))db.createObjectStore(PERSONAL_NOTES_STORE,{keyPath:"key"});};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||new Error("Could not open notes storage"));});return personalNotesDbPromise;}
 function noteFallbackRead(key){try{return JSON.parse(localStorage.getItem(PERSONAL_NOTES_FALLBACK)||"{}")[key]||null;}catch(e){return null;}}
 function noteFallbackWrite(key,record){try{const all=JSON.parse(localStorage.getItem(PERSONAL_NOTES_FALLBACK)||"{}");if(record)all[key]=record;else delete all[key];localStorage.setItem(PERSONAL_NOTES_FALLBACK,JSON.stringify(all));}catch(e){}}
 async function readPersonalNote(key){try{const db=await personalNotesDb();return await new Promise((resolve,reject)=>{const request=db.transaction(PERSONAL_NOTES_STORE).objectStore(PERSONAL_NOTES_STORE).get(key);request.onsuccess=()=>resolve(request.result||null);request.onerror=()=>reject(request.error);});}catch(e){return noteFallbackRead(key);}}
-async function writePersonalNote(key,text){const record=text.trim()?{key,text,updatedAt:Date.now()}:null;try{const db=await personalNotesDb();await new Promise((resolve,reject)=>{const request=db.transaction(PERSONAL_NOTES_STORE,"readwrite").objectStore(PERSONAL_NOTES_STORE)[record?"put":"delete"](record||key);request.onsuccess=()=>resolve();request.onerror=()=>reject(request.error);});}catch(e){noteFallbackWrite(key,record);}return record;}
+async function writePersonalNote(key,text){const record=text.trim()?{key,text,updatedAt:Date.now()}:null;try{const db=await personalNotesDb();await new Promise((resolve,reject)=>{const request=db.transaction(PERSONAL_NOTES_STORE,"readwrite").objectStore(PERSONAL_NOTES_STORE)[record?"put":"delete"](record||key);request.onsuccess=()=>resolve();request.onerror=()=>reject(request.error);});}catch(e){noteFallbackWrite(key,record);}setPersonalNoteIndicator(key,!!record);return record;}
+async function listPersonalNotes(){try{const db=await personalNotesDb();const records=await new Promise((resolve,reject)=>{const request=db.transaction(PERSONAL_NOTES_STORE,"readonly").objectStore(PERSONAL_NOTES_STORE).getAll();request.onsuccess=()=>resolve(request.result||[]);request.onerror=()=>reject(request.error);});return records.filter(record=>record&&record.key&&String(record.text||"").trim());}catch(e){try{return Object.values(JSON.parse(localStorage.getItem(PERSONAL_NOTES_FALLBACK)||"{}"));}catch(_){return [];}}}
+function setPersonalNoteIndicator(key,hasNote){document.querySelectorAll(".page-note-button").forEach(button=>{if(button.dataset.noteKey!==key)return;button.classList.toggle("has-note",hasNote);const label=button.dataset.noteLabel||"this page";button.title=hasNote?"Private note saved":"My private notes";button.setAttribute("aria-label",(hasNote?"Private note saved for ":"My private notes for ")+label);});}
+async function refreshPersonalNoteIndicator(button,key){const record=await readPersonalNote(key);if(button.dataset.noteKey!==key)return;const hasNote=!!String(record&&record.text||"").trim();button.classList.toggle("has-note",hasNote);const label=button.dataset.noteLabel||"this page";button.title=hasNote?"Private note saved":"My private notes";button.setAttribute("aria-label",(hasNote?"Private note saved for ":"My private notes for ")+label);}
+function personalNotePages(){const pages=[...buildBooklet().map((page,index)=>({key:page.noteKey,label:page.label,book:"booklet",page:index})),...buildRecipes().map((page,index)=>({key:page.noteKey,label:page.label,book:"recipes",page:index}))];return new Map(pages.filter(page=>page.key).map(page=>[page.key,page]));}
+function closePersonalNotesIndex(){$("#notesIndexPanel").classList.remove("on");$("#notesIndexPanel").setAttribute("aria-hidden","true");}
+async function openPersonalNotesIndex(){const panel=$("#notesIndexPanel"),list=$("#personalNotesList");panel.classList.add("on");panel.setAttribute("aria-hidden","false");list.innerHTML="<p class='muted'>Loading your private notes…</p>";const pages=personalNotePages(),records=(await listPersonalNotes()).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));list.innerHTML="";if(!records.length){list.innerHTML="<p class='muted'>You have not saved any notes yet.</p>";return;}records.forEach(record=>{const page=pages.get(record.key),item=el("button","personal-note-item");item.type="button";item.innerHTML="<b>"+esc(page?page.label:"Page no longer available")+"</b><span>"+esc((page&&page.book==="recipes"?"Recipes · ":"Booklet · ")+String(record.text||"").replace(/\s+/g," ").trim().slice(0,140))+"</span>";if(!page){item.disabled=true;item.title="This page is no longer in the booklet.";}else item.onclick=()=>{closePersonalNotesIndex();if(curBook!==page.book||!$("#reader").classList.contains("on"))openBook(page.book);renderPage(page.page);};list.appendChild(item);});}
 function noteStatus(text){const node=$("#personalNoteStatus");if(node)node.textContent=text||"";}
 function stopNoteDictation(){if(noteRecognition){try{noteRecognition.stop();}catch(e){}noteRecognition=null;}const button=$("#noteDictate");if(button)button.textContent="🎙 Dictate";}
 async function saveCurrentPersonalNote(){clearTimeout(personalNoteSaveTimer);const key=currentPersonalNoteKey,text=$("#personalNoteText").value;if(!key)return;noteStatus("Saving privately on this device…");const record=await writePersonalNote(key,text);if(key===currentPersonalNoteKey)noteStatus(record?"Saved privately on this device.":"No note saved for this page.");}
@@ -3077,10 +3099,10 @@ async function shareDay(n){const d=DATA.days.find(day=>day.n===Number(n));if(!d)
 function setReaderFont(delta){
   const root=document.documentElement,current=Number(root.dataset.textScale||"1"),next=Math.max(.9,Math.min(1.35,Math.round((current+delta)*100)/100));
   root.dataset.textScale=String(next);root.style.setProperty("--reader-font-scale",String(next));
-  try{localStorage.setItem("sicilyBookletFontScale",String(next));}catch(e){}
+  try{localStorage.setItem(storageKey("FontScale"),String(next));}catch(e){}
   toast("Text size "+Math.round(next*100)+"%");
 }
-function restoreReaderFont(){try{const n=Number(localStorage.getItem("sicilyBookletFontScale"));if(n>=.9&&n<=1.35){document.documentElement.dataset.textScale=String(n);document.documentElement.style.setProperty("--reader-font-scale",String(n));}}catch(e){}}
+function restoreReaderFont(){try{const n=Number(localStorage.getItem(storageKey("FontScale")));if(n>=.9&&n<=1.35){document.documentElement.dataset.textScale=String(n);document.documentElement.style.setProperty("--reader-font-scale",String(n));}}catch(e){}}
 function openContactPanel(){
   const t=DATA.trip,phone=phoneDigits(t.phone),actions=$("#contactActions");actions.innerHTML="";
   $("#contactTitle").textContent=t.leader||"Trip leader";$("#contactDetails").textContent=[t.phone,t.email].filter(Boolean).join(" · ");
@@ -3104,7 +3126,7 @@ function openSearchPanel(value){const input=$("#readerSearch");input.value=value
 function closeSearchPanel(){$("#searchPanel").classList.remove("on");$("#searchPanel").setAttribute("aria-hidden","true");}
 let speechUtterance=null,speechChunks=[],speechChunkIndex=0,speechPaused=false,speechRun=0;
 function speechAvailable(){return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;}
-function populateVoiceChoice(){const select=$("#voiceChoice");if(!select)return;const selected=localStorage.getItem("sicilyBookletVoiceLanguage")||"en-US";select.value=selected==="it-IT"?"it-IT":"en-US";}
+function populateVoiceChoice(){const select=$("#voiceChoice");if(!select)return;const selected=localStorage.getItem(storageKey("VoiceLanguage"))||"en-US";select.value=selected==="it-IT"?"it-IT":"en-US";}
 function updateAudioControls(){const active=!!speechUtterance||speechPaused;document.querySelectorAll(".page-audio-controls").forEach(group=>{const play=group.querySelector('[data-audio="play"]'),pause=group.querySelector('[data-audio="pause"]'),stop=group.querySelector('[data-audio="stop"]');if(play)play.disabled=active&&!speechPaused;if(pause)pause.disabled=!active||speechPaused;if(stop)stop.disabled=!active;});}
 function pageTextForSpeech(){const page=$("#stage .page");if(!page)return "";const copy=page.cloneNode(true);copy.querySelectorAll(".page-audio-controls").forEach(node=>node.remove());return (copy.innerText||copy.textContent||"").replace(/\s+/g," ").trim();}
 function speechParts(text){return (text.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g)||[text]).map(x=>x.trim()).filter(Boolean);}
@@ -3178,8 +3200,8 @@ function refreshHome(){
 /* ============ admin ============ */
 let adminUnlocked=false;
 let adminNewRecipe=false;
-const BACKUP_VERSION=4;
-const DATA_SCHEMA_VERSION=4;
+const BACKUP_VERSION=5;
+const DATA_SCHEMA_VERSION=5;
 const MIN_SUPPORTED_BACKUP_VERSION=1;
 async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));
   return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("");}
@@ -3231,14 +3253,17 @@ function migrateBackupData(rawData,sourceVersion){
     }else if(version===3){
       ensureContentIdsFor(data);
       version=4;
+    }else if(version===4){
+      ensureTourId(data);
+      version=5;
     }
   }
   if(data.trip&&typeof data.trip==="object"){if(typeof data.trip.subtitle!=="string")data.trip.subtitle="";if(typeof data.trip.endLabel!=="string")data.trip.endLabel="";}
-  ensureContentIdsFor(data);
+  ensureContentIdsFor(data);ensureTourId(data);
   data.schemaVersion=DATA_SCHEMA_VERSION;
   return {data,from:Number(sourceVersion)||1,migrated:(Number(sourceVersion)||1)!==DATA_SCHEMA_VERSION};
 }
-const ADMIN_DRAFT_KEY="sicilyBookletAdminDraftV1";
+const ADMIN_DRAFT_KEY=storageKey("AdminDraftV1");
 let draftTimer=null;
 let draftCheckedThisSession=false;
 function draftRecord(){try{return JSON.parse(localStorage.getItem(ADMIN_DRAFT_KEY)||"null");}catch(e){return null;}}
@@ -3296,11 +3321,11 @@ function recordUndo(){if(!adminUnlocked)return;undoStack.push(JSON.stringify(DAT
 function undoLastChange(){const previous=undoStack.pop();if(!previous){toast("Nothing to undo");return;}DATA=JSON.parse(previous);fillAdmin();scheduleDraft();toast("Last change undone");}
 function updateDashboard(){
   const stats=$("#dashboardStats");if(!stats)return;const places=catalogEntries("place").length,restaurants=catalogEntries("restaurant").length,wines=wineEntries().length,draft=draftRecord();
-  let backup=null;try{backup=localStorage.getItem("sicilyBookletLastBackup");}catch(e){}stats.textContent=DATA.days.length+" days · "+places+" places · "+restaurants+" restaurants · "+wines+" wines · "+DATA.recipes.length+" recipes"+(draft?" · local draft saved":" · no local draft")+(backup?" · backup: "+new Date(Number(backup)).toLocaleDateString():" · no local backup recorded");
+  let backup=null;try{backup=localStorage.getItem(storageKey("LastBackup"));}catch(e){}stats.textContent=DATA.days.length+" days · "+places+" places · "+restaurants+" restaurants · "+wines+" wines · "+DATA.recipes.length+" recipes"+(draft?" · local draft saved":" · no local draft")+(backup?" · backup: "+new Date(Number(backup)).toLocaleDateString():" · no local backup recorded");
   $("#fUndo").disabled=!undoStack.length;
 }
 function qualityErrors(){
-  normalizeGuideTypes();const errors=[];if(!String(DATA.trip.title||"").trim())errors.push("Trip title is missing.");if(!DATA.trip.startDate)errors.push("Arrival date is missing.");
+  normalizeGuideTypes();const errors=[];if(!String(DATA.trip.title||"").trim())errors.push("Trip title is missing.");if(!DATA.trip.startDate)errors.push("Arrival date is missing.");if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(DATA.tourId||"")))errors.push("Unique tour code must use lowercase letters, numbers and hyphens only.");
   DATA.days.forEach(d=>{if(!String(d.title||"").trim())errors.push("Day "+d.n+" has no title.");if(!String(d.location||"").trim())errors.push("Day "+d.n+" has no location.");if(!Array.isArray(d.items)||!d.items.length)errors.push("Day "+d.n+" has no activities.");});
   DATA.recipes.forEach((r,i)=>{if(!String(r.name||"").trim())errors.push("Recipe "+(i+1)+" has no name.");});
   allGuideEntries().forEach(x=>{if(!x.e.name||!x.e.name.trim())errors.push("A guide entry in "+x.g.city+" has no name.");if(x.e.type!=="place"&&x.e.type!=="restaurant")errors.push("Invalid type for "+(x.e.name||"a guide entry")+".");[x.e.maps,x.e.website].filter(Boolean).forEach(url=>{if(!safeHttpUrl(url))errors.push("Invalid web link for "+(x.e.name||"a guide entry")+".");});if(x.e.phone&&phoneDigits(x.e.phone).length<6)errors.push("Invalid phone number for "+(x.e.name||"a guide entry")+".");});
@@ -3323,7 +3348,7 @@ function runTechnicalSelfCheck(){
 }
 function fillAdmin(){
   normalizeGuideTypes();const t=DATA.trip; $("#adminUpdated").textContent="Last updated: "+fmtLong(parseISO(DATA.aggiornatoIl));
-  $("#fStart").value=t.startDate; $("#fTitle").value=t.title; $("#fLeader").value=t.leader; $("#fPhone").value=t.phone; $("#fEmail").value=t.email; $("#fTripSubtitle").value=t.subtitle||""; $("#fTripEndLabel").value=t.endLabel||""; updateDatePreview();
+  $("#fStart").value=t.startDate; $("#fTitle").value=t.title; $("#fTourId").value=ensureTourId(DATA); $("#fLeader").value=t.leader; $("#fPhone").value=t.phone; $("#fEmail").value=t.email; $("#fTripSubtitle").value=t.subtitle||""; $("#fTripEndLabel").value=t.endLabel||""; updateDatePreview();
   const sel=$("#fDaySel"); sel.innerHTML=""; DATA.days.forEach(d=>{const o=el("option",null,"Day "+d.n+" — "+d.title);o.value=d.n;sel.appendChild(o);});
   if(DATA.days.length)sel.value=Math.min(Number(sel.value)||1,DATA.days.length); loadDayIntoForm();
   fillRecipeSelector();
@@ -3337,7 +3362,7 @@ function updateDatePreview(){const iso=$("#fStart").value;if(!iso){$("#datePrevi
 function currentDay(){return DATA.days.find(d=>d.n===Number($("#fDaySel").value));}
 function loadDayIntoForm(){const d=currentDay();if(!d)return;$("#fDayTitle").value=d.title||"";$("#fDayHotel").value=d.hotel||"";$("#fDayLocation").value=d.location||"";$("#fDayMeals").value=d.meals||"";$("#fDayIntro").value=d.intro||"";$("#fDayItems").value=(d.items||[]).join("\n");$("#fDayNotes").value=(d.notes||[]).join("\n");const list=$("#fExtraList");list.innerHTML="";(d.extra||[]).forEach(txt=>addExtraRow(txt));}
 function addExtraRow(txt){const row=el("div","para-row"),ta=el("textarea");ta.value=txt||"";ta.placeholder="Type the new paragraph…";const x=el("button","x","×");x.title="Remove";x.onclick=()=>{row.remove();commitDay();};row.appendChild(ta);row.appendChild(x);$("#fExtraList").appendChild(row);}
-function commitTrip(){DATA.trip.startDate=$("#fStart").value||DATA.trip.startDate;DATA.trip.title=$("#fTitle").value.trim()||DATA.trip.title;DATA.trip.leader=$("#fLeader").value.trim()||DATA.trip.leader;DATA.trip.phone=$("#fPhone").value.trim();DATA.trip.email=$("#fEmail").value.trim();DATA.trip.subtitle=$("#fTripSubtitle").value.trim();DATA.trip.endLabel=$("#fTripEndLabel").value.trim();DATA.trip.days=DATA.days.length;}
+function commitTrip(){DATA.trip.startDate=$("#fStart").value||DATA.trip.startDate;DATA.trip.title=$("#fTitle").value.trim()||DATA.trip.title;const enteredTourId=normalizeTourId($("#fTourId").value);if(enteredTourId){DATA.tourId=enteredTourId;$("#fTourId").value=enteredTourId;}DATA.trip.leader=$("#fLeader").value.trim()||DATA.trip.leader;DATA.trip.phone=$("#fPhone").value.trim();DATA.trip.email=$("#fEmail").value.trim();DATA.trip.subtitle=$("#fTripSubtitle").value.trim();DATA.trip.endLabel=$("#fTripEndLabel").value.trim();DATA.trip.days=DATA.days.length;}
 function commitDay(){const d=currentDay();if(!d)return;d.title=$("#fDayTitle").value.trim()||d.title;d.hotel=$("#fDayHotel").value.trim();d.location=$("#fDayLocation").value.trim();d.meals=$("#fDayMeals").value.trim();d.intro=$("#fDayIntro").value.trim();d.items=$("#fDayItems").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);d.notes=$("#fDayNotes").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);d.extra=[...$("#fExtraList").querySelectorAll("textarea")].map(t=>t.value.trim()).filter(Boolean);}
 let adminNewInfo=false,adminNewRef=false;
 function splitPair(line){const i=line.indexOf("|");return i<0?[line.trim(),""]:[line.slice(0,i).trim(),line.slice(i+1).trim()];}
@@ -3514,7 +3539,7 @@ function addDay(){commitTrip();commitDay();const n=DATA.days.length+1;DATA.days.
 async function deleteDay(){commitDay();if(DATA.days.length<=1){await sysAlert("The itinerary must contain at least one day.","Cannot delete day");return;}const n=Number($("#fDaySel").value),d=currentDay();const ok=await sysConfirm("Delete Day "+n+" — "+(d?.title||"")+"?","Delete day","Delete");if(!ok)return;DATA.days.splice(n-1,1);renumberDays();fillAdmin();$("#fDaySel").value=String(Math.min(n,DATA.days.length));loadDayIntoForm();}
 function moveDay(delta){commitDay();const i=Number($("#fDaySel").value)-1,j=i+delta;if(j<0||j>=DATA.days.length)return;[DATA.days[i],DATA.days[j]]=[DATA.days[j],DATA.days[i]];renumberDays();fillAdmin();$("#fDaySel").value=String(j+1);loadDayIntoForm();}
 /* generate the updated file */
-async function generateFile(btn){btn.disabled=true;try{commitTrip();commitDay();commitRecipe();commitInfo();commitRef();if(adminNewRecipe&&!saveRecipe()){btn.disabled=false;return;}commitCatalog('place');commitCatalog('restaurant');commitWine();if(adminNewPlace){saveCatalog('place');if(adminNewPlace){btn.disabled=false;return;}}if(adminNewRestaurant){saveCatalog('restaurant');if(adminNewRestaurant){btn.disabled=false;return;}}if(adminNewWine&&!saveWine()){btn.disabled=false;return;}if(adminNewInfo&&!saveInfo()){btn.disabled=false;return;}if(adminNewRef&&!saveRef()){btn.disabled=false;return;}renumberDays();const nc=JSON.parse(JSON.stringify(DATA));const np=$("#fPwd").value.trim();if(np){if(np.length<6){await sysAlert("The new password must be at least 6 characters.","Password too short");btn.disabled=false;return;}nc.adminHash=await sha256(np);}const today=new Date();nc.aggiornatoIl=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");const clone=document.documentElement.cloneNode(true),q=s=>clone.querySelector(s);q("#config-dati").textContent="\n"+JSON.stringify(nc,null,2)+"\n";q("#stage").innerHTML="";q("#drawerList").innerHTML="";q("#fExtraList").innerHTML="";q("#fDaySel").innerHTML="";q("#fRecipeSel").innerHTML="";q("#fInfoSel").innerHTML="";q("#fRefSel").innerHTML="";q("#fPlaceCat").innerHTML="";q("#fRestaurantCat").innerHTML="";q("#fPlaceCity").innerHTML="";q("#fRestaurantCity").innerHTML="";q("#adminUpdated").textContent="";q("#datePreview").textContent="";q("#reader").classList.remove("on","recipe");q("#admin").classList.remove("on");q("#drawer").classList.remove("on");q("#modalOverlay").classList.remove("on");q("#contactPanel").classList.remove("on");q("#searchPanel").classList.remove("on");q("#contactActions").innerHTML="";q("#searchResults").innerHTML="";q("#home").style.display="";q("#mInput").style.display="none";q("#mInput").value="";q("#fPwd").value="";clone.querySelectorAll("input").forEach(i=>{if(i.type!=="button")i.removeAttribute("value");});clone.querySelectorAll("textarea").forEach(t=>t.textContent="");q("#toast").classList.remove("on");q("#toast").textContent="";{const rp=q("#resumePrompt");if(rp)rp.classList.remove("on");}{const prt=q("#printRoot");if(prt)prt.innerHTML="";}const html="<!DOCTYPE html>\n"+clone.outerHTML;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([html],{type:"text/html;charset=utf-8"}));a.download="sicily-booklet-"+nc.aggiornatoIl+".html";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);DATA.aggiornatoIl=nc.aggiornatoIl;DATA.adminHash=nc.adminHash;$("#fPwd").value="";fillAdmin();toast("Updated file downloaded");}catch(err){await sysAlert("Something went wrong while generating the file: "+err.message,"Couldn't save");}btn.disabled=false;}
+async function generateFile(btn){btn.disabled=true;try{commitTrip();commitDay();commitRecipe();commitInfo();commitRef();if(adminNewRecipe&&!saveRecipe()){btn.disabled=false;return;}commitCatalog('place');commitCatalog('restaurant');commitWine();if(adminNewPlace){saveCatalog('place');if(adminNewPlace){btn.disabled=false;return;}}if(adminNewRestaurant){saveCatalog('restaurant');if(adminNewRestaurant){btn.disabled=false;return;}}if(adminNewWine&&!saveWine()){btn.disabled=false;return;}if(adminNewInfo&&!saveInfo()){btn.disabled=false;return;}if(adminNewRef&&!saveRef()){btn.disabled=false;return;}renumberDays();const nc=JSON.parse(JSON.stringify(DATA));const np=$("#fPwd").value.trim();if(np){if(np.length<6){await sysAlert("The new password must be at least 6 characters.","Password too short");btn.disabled=false;return;}nc.adminHash=await sha256(np);}const today=new Date();nc.aggiornatoIl=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");const clone=document.documentElement.cloneNode(true),q=s=>clone.querySelector(s);q("#config-dati").textContent="\n"+JSON.stringify(nc,null,2)+"\n";q("#stage").innerHTML="";q("#drawerList").innerHTML="";q("#fExtraList").innerHTML="";q("#fDaySel").innerHTML="";q("#fRecipeSel").innerHTML="";q("#fInfoSel").innerHTML="";q("#fRefSel").innerHTML="";q("#fPlaceCat").innerHTML="";q("#fRestaurantCat").innerHTML="";q("#fPlaceCity").innerHTML="";q("#fRestaurantCity").innerHTML="";q("#adminUpdated").textContent="";q("#datePreview").textContent="";q("#reader").classList.remove("on","recipe");q("#admin").classList.remove("on");q("#drawer").classList.remove("on");q("#modalOverlay").classList.remove("on");q("#contactPanel").classList.remove("on");q("#searchPanel").classList.remove("on");q("#contactActions").innerHTML="";q("#searchResults").innerHTML="";q("#home").style.display="";q("#mInput").style.display="none";q("#mInput").value="";q("#fPwd").value="";clone.querySelectorAll("input").forEach(i=>{if(i.type!=="button")i.removeAttribute("value");});clone.querySelectorAll("textarea").forEach(t=>t.textContent="");q("#toast").classList.remove("on");q("#toast").textContent="";{const rp=q("#resumePrompt");if(rp)rp.classList.remove("on");}{const prt=q("#printRoot");if(prt)prt.innerHTML="";}const html="<!DOCTYPE html>\n"+clone.outerHTML;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([html],{type:"text/html;charset=utf-8"}));a.download=nc.tourId+"-"+nc.aggiornatoIl+".html";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);DATA.aggiornatoIl=nc.aggiornatoIl;DATA.adminHash=nc.adminHash;$("#fPwd").value="";fillAdmin();toast("Updated file downloaded");}catch(err){await sysAlert("Something went wrong while generating the file: "+err.message,"Couldn't save");}btn.disabled=false;}
 
 /* ============ wire up ============ */
 $("#openBooklet").onclick=()=>openBook("booklet");
@@ -3534,14 +3559,16 @@ $("#todayClose").onclick=closeTodayPanel;
 $("#userGuideClose").onclick=closeUserGuide;
 $("#noteClose").onclick=closePersonalNote;
 $("#noteCloseX").onclick=closePersonalNote;
+$("#notesIndexClose").onclick=closePersonalNotesIndex;
 $("#noteDelete").onclick=deletePersonalNote;
 $("#noteDictate").onclick=toggleNoteDictation;
 $("#personalNoteText").addEventListener("input",schedulePersonalNoteSave);
 $("#todayPanel").addEventListener("click",e=>{if(e.target===$("#todayPanel"))closeTodayPanel();});
 $("#userGuidePanel").addEventListener("click",e=>{if(e.target===$("#userGuidePanel"))closeUserGuide();});
 $("#notePanel").addEventListener("click",e=>{if(e.target===$("#notePanel"))closePersonalNote();});
+$("#notesIndexPanel").addEventListener("click",e=>{if(e.target===$("#notesIndexPanel"))closePersonalNotesIndex();});
 $("#stage").addEventListener("click",e=>{const note=e.target.closest(".page-note-button");if(note){openPersonalNote(note.dataset.noteKey,note.dataset.noteLabel);return;}const button=e.target.closest(".share-day");if(button){shareDay(button.dataset.day);return;}const audio=e.target.closest("[data-audio]");if(!audio)return;if(audio.dataset.audio==="play")playSpeech();else if(audio.dataset.audio==="pause")pauseSpeech();else if(audio.dataset.audio==="stop")stopSpeech();});
-$("#voiceChoice").addEventListener("change",e=>{try{localStorage.setItem("sicilyBookletVoiceLanguage",e.target.value);}catch(err){};});
+$("#voiceChoice").addEventListener("change",e=>{try{localStorage.setItem(storageKey("VoiceLanguage"),e.target.value);}catch(err){};});
 $("#contactPanel").addEventListener("click",e=>{if(e.target===$("#contactPanel"))closeContactPanel();});
 $("#btnSearch").onclick=()=>openSearchPanel("");
 $("#searchClose").onclick=closeSearchPanel;
@@ -3554,7 +3581,7 @@ $("#homeAdminHint").onclick=tryOpenAdmin;
 $("#adminBack").onclick=()=>{ commitTrip(); commitDay(); commitRecipe(); commitCatalog("place"); commitCatalog("restaurant"); commitWine(); $("#admin").classList.remove("on"); goHome(); };
 
 $("#fStart").addEventListener("input",()=>{updateDatePreview();commitTrip();});
-["fTitle","fLeader","fPhone","fEmail","fTripSubtitle","fTripEndLabel"].forEach(id=>$("#"+id).addEventListener("input",commitTrip));
+["fTitle","fTourId","fLeader","fPhone","fEmail","fTripSubtitle","fTripEndLabel"].forEach(id=>$("#"+id).addEventListener("input",commitTrip));
 $("#fDaySel").addEventListener("change",()=>{loadDayIntoForm();});
 ["fDayTitle","fDayHotel","fDayLocation","fDayMeals","fDayIntro","fDayItems","fDayNotes"].forEach(id=>$("#"+id).addEventListener("input",commitDay));
 $("#fAddExtra").onclick=()=>addExtraRow("");
@@ -3579,7 +3606,7 @@ $('#fInfoSel').addEventListener('change',()=>{$('#fInfoSel').value==='__new__'?n
 $('#fAddInfo').onclick=()=>{newInfoForm();$('#fInfoTitle').focus();}; $('#fSaveInfo').onclick=saveInfo; $('#fCancelInfo').onclick=cancelInfo; $('#fDeleteInfo').onclick=deleteInfo;
 $('#fRefSel').addEventListener('change',()=>{$('#fRefSel').value==='__new__'?newRefForm():loadRefIntoForm();});
 $('#fRefKind').addEventListener('change',updateRefHint); $('#fAddRef').onclick=()=>{newRefForm();$('#fRefTitle').focus();}; $('#fSaveRef').onclick=saveRef; $('#fCancelRef').onclick=cancelRef; $('#fDeleteRef').onclick=deleteRef;
-$("#fBackup").onclick=()=>{downloadBackup();try{localStorage.setItem("sicilyBookletLastBackup",String(Date.now()));}catch(e){}updateDashboard();};
+$("#fBackup").onclick=()=>{downloadBackup();try{localStorage.setItem(storageKey("LastBackup"),String(Date.now()));}catch(e){}updateDashboard();};
 $("#fRestore").onclick=()=>$("#fBackupFile").click();
 $("#fBackupFile").addEventListener("change",e=>{const f=e.target.files?.[0];if(f)restoreBackupFile(f);e.target.value="";});
 $("#fUndo").onclick=undoLastChange;
