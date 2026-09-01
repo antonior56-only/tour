@@ -1994,6 +1994,7 @@ body *{font-family:var(--font-body)}
 .contact-panel{position:absolute;inset:0;z-index:80;display:none;align-items:flex-end;background:rgba(23,49,62,.48);padding:18px}
 .contact-panel.on{display:flex}.contact-card{width:100%;background:var(--paper2);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
 .contact-card h3{font-family:"Fraunces",serif;font-weight:500;margin:0 0 6px}.contact-card p{margin:0 0 14px;color:var(--ink-soft);font-size:14px}
+.note-card{position:relative}.note-card textarea{width:100%;min-height:180px;resize:vertical;font:inherit;line-height:1.45;padding:11px;border:1px solid var(--line-strong);border-radius:9px;background:#fff;color:var(--ink)}.note-card .note-status{min-height:18px;margin:8px 0 0;font-size:12px}.note-card .note-privacy{font-size:12px;line-height:1.35}.note-close-x{position:absolute;right:12px;top:12px;width:30px;height:30px;border:1px solid var(--line-strong);border-radius:7px;background:var(--paper2);color:var(--ink);font:500 22px/1 sans-serif;cursor:pointer}
 .user-guide-copy{max-height:58vh;overflow-y:auto;padding-right:4px;font-size:14px;line-height:1.45}.user-guide-copy h5{font:500 20px var(--font-display);margin:0 0 8px}.user-guide-copy ul{padding-left:20px;margin:8px 0}.user-guide-copy li{margin:7px 0}
 .search-results{max-height:52vh;overflow:auto;margin-top:10px}.search-result{width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:11px 2px;color:var(--ink);font:inherit;cursor:pointer}.search-result b{display:block;font-family:"Fraunces",serif;font-weight:500}.search-result small{display:block;color:var(--ink-soft);font-size:12px;margin-top:2px}
 .guide-actions{display:flex;gap:7px;margin-top:8px}.guide-actions a{display:inline-grid;place-items:center;width:31px;height:31px;border:1px solid var(--line-strong);border-radius:8px;color:var(--blue);background:#fff;text-decoration:none}.guide-actions svg{width:17px;height:17px}
@@ -2052,6 +2053,7 @@ body *{font-family:var(--font-body)}
 .page-audio-controls button[data-audio="play"]{background:var(--ink);color:#fff8ec;border-color:var(--ink)}
 .page-audio-controls button:disabled{opacity:.42;cursor:default}
 @media(max-width:620px){.page-topline{gap:7px}.page-audio-controls{gap:3px}.page-audio-controls button{width:27px;height:27px;min-height:27px;font-size:12px}}
+.page-personal-tools{display:flex;justify-content:flex-end;margin:-7px 0 7px}.page-note-button{width:29px;height:29px;border:1px solid var(--line-strong);border-radius:7px;background:var(--paper2);color:var(--ink);font:600 16px "Spectral",serif;cursor:pointer}.page-topline .page-note-button{margin-left:3px;flex:0 0 auto}
 
 .bottom{
   display:flex;align-items:center;gap:10px;padding:9px 14px 12px;
@@ -2469,6 +2471,9 @@ ol.plan li::before{
   <div class="contact-panel" id="userGuidePanel" aria-hidden="true">
     <div class="contact-card"><h3>Using your Sicily Booklet</h3><div class="user-guide-copy" id="userGuideContent"></div><div class="field-actions" style="margin-top:12px"><button class="field-btn primary" id="userGuideClose">Close</button></div></div>
   </div>
+  <div class="contact-panel" id="notePanel" aria-hidden="true">
+    <div class="contact-card note-card"><button class="note-close-x" id="noteCloseX" type="button" aria-label="Close notes" title="Close">×</button><h3>My notes</h3><p class="note-privacy">These notes are private. They are saved only in this browser on this device and are never shared with the tour leader or other travellers.</p><textarea id="personalNoteText" placeholder="Write a private note for this page…"></textarea><p class="note-status" id="personalNoteStatus"></p><div class="field-actions"><button class="field-btn" id="noteDictate">🎙 Dictate</button><button class="field-btn danger" id="noteDelete">Delete note</button><button class="field-btn primary" id="noteClose">Done</button></div></div>
+  </div>
 
   <!-- ===== ADMIN ===== -->
   <section id="admin">
@@ -2500,10 +2505,11 @@ ol.plan li::before{
               <li><b>Today:</b> during the trip, choose “Go to today” for the day’s hotel, meals and activities.</li>
               <li><b>Maps:</b> tap an address in a practical guide to open directions. On Apple devices it opens Apple Maps; elsewhere it opens Google Maps.</li>
               <li><b>Contact guide:</b> use the Contact guide button to call, send a WhatsApp message or email the tour leader.</li>
-              <li><b>Text size and listening:</b> use A− / A+ for comfortable reading. On itinerary and recipe pages, use the Play, Pause and Stop controls at the top of the page.</li>
+              <li><b>Text size and listening:</b> use A− / A+ for comfortable reading. On Useful info, itinerary and recipe pages, use the Play, Pause and Stop controls at the top of the page. After Pause, Play continues without needing Stop.</li>
+              <li><b>My notes:</b> tap the pencil on any page to write a personal note. Notes are private, saved only in this browser on this device, and are never shared with the tour leader or other travellers. You can type or use Dictate where supported; dictation may require an internet connection.</li>
               <li><b>Sharing:</b> each itinerary day has a Share this day button. Your device will share or copy a short summary.</li>
             </ul>
-            <p>The booklet works without a connection for reading. Map links, websites, calls and WhatsApp naturally require a connection or phone service.</p>
+            <p>The booklet works without a connection for reading and for your saved notes. Map links, websites, calls, WhatsApp and browser dictation naturally require a connection or phone service.</p>
           </div>
         </details>
         <details>
@@ -2791,7 +2797,7 @@ function guideActions(entry){
 
 function coverPage(){
   const t=DATA.trip;
-  return {group:"", label:"Cover", html:
+  return {group:"", label:"Cover", noteKey:"booklet:cover", html:
     `<div class="pg-cover">
       <span class="eyebrow">${esc(t.subtitle)}</span>
       <h1>${esc(t.title)}</h1>
@@ -2805,7 +2811,7 @@ function coverPage(){
 }
 function infoPage(p){
   let s=p.sections.map(x=>`<div class="info-block"><h3>${esc(x.head)}</h3><p>${esc(x.body)}</p></div>`).join("");
-  return {group:"Before you go", label:p.title, html:
+  return {group:"Before you go", label:p.title, noteKey:"info:"+p.id, html:
     `<div class="pg"><div class="page-topline"><span class="kicker">Useful info</span>${pageAudioControls()}</div><h2>${esc(p.title)}</h2>${s}</div>`};
 }
 function dayPage(d){
@@ -2815,7 +2821,7 @@ function dayPage(d){
     `<div class="notes"><span class="kicker">Good to know</span><ul>${d.notes.map(n=>`<li>${esc(n)}</li>`).join("")}</ul></div>`:"";
   const extra=(d.extra&&d.extra.length)?
     d.extra.map(x=>`<div class="extra-note"><p>${esc(x)}</p></div>`).join(""):"";
-  return {group:"Day by day", label:"Day "+d.n+" \u2014 "+d.title, short:fmtShort(date), dayNumber:d.n, html:
+  return {group:"Day by day", label:"Day "+d.n+" \u2014 "+d.title, short:fmtShort(date), dayNumber:d.n, noteKey:"day:"+d.id, html:
     `<div class="pg">
       <div class="page-topline"><span class="kicker">Day ${d.n} of ${DATA.trip.days}</span>${pageAudioControls()}</div>
       <h2>${esc(d.title)}</h2>
@@ -2849,21 +2855,21 @@ function refPage(r){
     body=(r.intro?`<p class="lead">${esc(r.intro)}</p>`:"")+`<div class="deflist">`+
       r.items.map(i=>`<div class="df"><b>${esc(i[0])}</b><p>${esc(i[1])}</p></div>`).join("")+`</div>`;
   }
-  return {group:"Field guide & lore", label:r.title, html:
+  return {group:"Field guide & lore", label:r.title, noteKey:"reference:"+r.id, html:
     `<div class="pg"><span class="kicker">Sicily</span><h2>${esc(r.title)}</h2>${body}</div>`};
 }
 function guidePage(g){
   const entries=g.entries.map(e=>
     `<div class="guide-entry"><div class="gname">${esc(e.name)}</div>${e.loc?`<a class="gloc map-link" href="${guideNavigationUrl(e,g)}" target="_blank" rel="noopener" aria-label="Open ${esc(e.name)} in maps">${esc(e.loc)}</a>`:""}${e.checkedOn?`<div class="gloc">Checked: ${esc(e.checkedOn)}</div>`:""}<p class="gdesc">${esc(e.desc)}</p>${guideActions(e)}</div>`).join("");
-  return {group:"Practical guides", label:g.city+" \u2014 "+g.cat, html:
+  return {group:"Practical guides", label:g.city+" \u2014 "+g.cat, noteKey:"guide:"+g.id, html:
     `<div class="pg"><span class="kicker">${esc(g.city)}</span><h2>${esc(g.cat)}</h2>${entries}</div>`};
 }
-function dividerPage(kick,title,sub){
-  return {group:title, label:title, divider:true, html:
+function dividerPage(kick,title,sub,noteKey){
+  return {group:title, label:title, divider:true, noteKey:noteKey||"divider:"+idSlug(title), html:
     `<div class="section-divider"><span class="eyebrow">${esc(kick)}</span><h2>${esc(title)}</h2><div class="rule"></div><p>${esc(sub)}</p></div>`};
 }
 function bookletBack(){
-  return {group:"", label:"End", html:
+  return {group:"", label:"End", noteKey:"booklet:end", html:
     `<div class="back-cover">
       <div class="mark">${pinSvg()}</div>
       <p>You've reached the end of the booklet. Amun\u00ec &mdash; let's go, and enjoy every colour, smell and sound of Sicily.</p>
@@ -2872,7 +2878,7 @@ function bookletBack(){
 }
 
 function recipeCover(){
-  return {group:"", label:"Cover", html:
+  return {group:"", label:"Cover", noteKey:"recipes:cover", html:
     `<div class="pg-cover">
       <span class="eyebrow" style="color:var(--terra)">Overseas Adventure Travel</span>
       <h1>Sicilian Food Memories</h1>
@@ -2884,7 +2890,7 @@ function recipeCover(){
 function recipePage(r){
   const ing=r.ingredients.map(i=>`<li>${esc(i)}</li>`).join("");
   const note=r.note?`<div class="rnote">${esc(r.note)}</div>`:"";
-  return {group:"Recipes", label:r.name, html:
+  return {group:"Recipes", label:r.name, noteKey:"recipe:"+r.id, html:
     `<div class="pg pg-recipe">
       <div class="page-topline"><span class="kicker">Recipe</span>${pageAudioControls()}</div>
       <h2>${esc(r.name)}</h2>
@@ -2898,24 +2904,26 @@ function recipePage(r){
     </div>`};
 }
 function recipeBack(){
-  return {group:"", label:"End", html:
+  return {group:"", label:"End", noteKey:"recipes:end", html:
     `<div class="back-cover"><div class="mark" style="border-color:var(--terra);color:var(--terra)">${pinSvg()}</div>
     <p>Buon appetito. Cook these when you're back home and you'll be in Sicily again for an afternoon.</p></div>`};
 }
 
 /* ============ assemble books ============ */
 function buildBooklet(){
+  ensureContentIdsFor(DATA);
   const pages=[coverPage()];
   DATA.info.forEach(p=>pages.push(infoPage(p)));
   DATA.days.forEach(d=>pages.push(dayPage(d)));
-  pages.push(dividerPage("Field guide & lore","Sicily, deeper","History, grapes, grains and the food you should try."));
+  pages.push(dividerPage("Field guide & lore","Sicily, deeper","History, grapes, grains and the food you should try.","booklet:field-guide"));
   DATA.reference.forEach(r=>pages.push(refPage(r)));
-  pages.push(dividerPage("Practical guides","On your own","Where locals eat, drink and wander \u2014 city by city."));
+  pages.push(dividerPage("Practical guides","On your own","Where locals eat, drink and wander \u2014 city by city.","booklet:practical-guides"));
   DATA.guides.forEach(g=>pages.push(guidePage(g)));
   pages.push(bookletBack());
   return pages;
 }
 function buildRecipes(){
+  ensureContentIdsFor(DATA);
   const pages=[recipeCover()];
   DATA.recipes.forEach(r=>pages.push(recipePage(r)));
   pages.push(recipeBack());
@@ -2970,6 +2978,7 @@ function renderPage(newIdx,dir){
   const stage=$("#stage"); stage.innerHTML="";
   const page=el("div","page"+(dir==="next"?" enter-r":dir==="prev"?" enter-l":""));
   page.innerHTML=p.html;
+  if(p.noteKey){const noteButton=el("button","page-note-button","✎");noteButton.type="button";noteButton.dataset.noteKey=p.noteKey;noteButton.dataset.noteLabel=p.label;noteButton.title="My private notes";noteButton.setAttribute("aria-label","My private notes for "+p.label);const topLine=page.querySelector(".page-topline");if(topLine)topLine.appendChild(noteButton);else{const tools=el("div","page-personal-tools");tools.appendChild(noteButton);page.prepend(tools);}}
   stage.appendChild(page);
   page.scrollTop=0;
   // header + footer
@@ -3049,6 +3058,21 @@ function openUserGuide(){
   $("#userGuidePanel").classList.add("on");$("#userGuidePanel").setAttribute("aria-hidden","false");
 }
 function closeUserGuide(){$("#userGuidePanel").classList.remove("on");$("#userGuidePanel").setAttribute("aria-hidden","true");}
+const PERSONAL_NOTES_DB="sicilyBookletPersonalNotes",PERSONAL_NOTES_STORE="notes",PERSONAL_NOTES_FALLBACK="sicilyBookletPersonalNotesFallback";
+let personalNotesDbPromise=null,currentPersonalNoteKey="",personalNoteSaveTimer=null,noteRecognition=null;
+function personalNotesDb(){if(!("indexedDB" in window))return Promise.reject(new Error("IndexedDB is unavailable"));if(personalNotesDbPromise)return personalNotesDbPromise;personalNotesDbPromise=new Promise((resolve,reject)=>{const request=indexedDB.open(PERSONAL_NOTES_DB,1);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(PERSONAL_NOTES_STORE))db.createObjectStore(PERSONAL_NOTES_STORE,{keyPath:"key"});};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||new Error("Could not open notes storage"));});return personalNotesDbPromise;}
+function noteFallbackRead(key){try{return JSON.parse(localStorage.getItem(PERSONAL_NOTES_FALLBACK)||"{}")[key]||null;}catch(e){return null;}}
+function noteFallbackWrite(key,record){try{const all=JSON.parse(localStorage.getItem(PERSONAL_NOTES_FALLBACK)||"{}");if(record)all[key]=record;else delete all[key];localStorage.setItem(PERSONAL_NOTES_FALLBACK,JSON.stringify(all));}catch(e){}}
+async function readPersonalNote(key){try{const db=await personalNotesDb();return await new Promise((resolve,reject)=>{const request=db.transaction(PERSONAL_NOTES_STORE).objectStore(PERSONAL_NOTES_STORE).get(key);request.onsuccess=()=>resolve(request.result||null);request.onerror=()=>reject(request.error);});}catch(e){return noteFallbackRead(key);}}
+async function writePersonalNote(key,text){const record=text.trim()?{key,text,updatedAt:Date.now()}:null;try{const db=await personalNotesDb();await new Promise((resolve,reject)=>{const request=db.transaction(PERSONAL_NOTES_STORE,"readwrite").objectStore(PERSONAL_NOTES_STORE)[record?"put":"delete"](record||key);request.onsuccess=()=>resolve();request.onerror=()=>reject(request.error);});}catch(e){noteFallbackWrite(key,record);}return record;}
+function noteStatus(text){const node=$("#personalNoteStatus");if(node)node.textContent=text||"";}
+function stopNoteDictation(){if(noteRecognition){try{noteRecognition.stop();}catch(e){}noteRecognition=null;}const button=$("#noteDictate");if(button)button.textContent="🎙 Dictate";}
+async function saveCurrentPersonalNote(){clearTimeout(personalNoteSaveTimer);const key=currentPersonalNoteKey,text=$("#personalNoteText").value;if(!key)return;noteStatus("Saving privately on this device…");const record=await writePersonalNote(key,text);if(key===currentPersonalNoteKey)noteStatus(record?"Saved privately on this device.":"No note saved for this page.");}
+function schedulePersonalNoteSave(){clearTimeout(personalNoteSaveTimer);noteStatus("Saving…");personalNoteSaveTimer=setTimeout(()=>{saveCurrentPersonalNote();},450);}
+async function openPersonalNote(key,label){currentPersonalNoteKey=key;const panel=$("#notePanel"),text=$("#personalNoteText");text.value="";text.disabled=true;noteStatus("Loading your private note…");$("#noteDictate").hidden=!(window.SpeechRecognition||window.webkitSpeechRecognition);panel.classList.add("on");panel.setAttribute("aria-hidden","false");const record=await readPersonalNote(key);if(currentPersonalNoteKey!==key)return;text.value=record?.text||"";text.disabled=false;noteStatus(record?"Saved privately on this device.":"Private note for "+label+".");text.focus();}
+function closePersonalNote(){saveCurrentPersonalNote();stopNoteDictation();currentPersonalNoteKey="";$("#notePanel").classList.remove("on");$("#notePanel").setAttribute("aria-hidden","true");}
+async function deletePersonalNote(){if(!currentPersonalNoteKey)return;const ok=await sysConfirm("Delete your private note for this page? This cannot be undone.","Delete private note","Delete");if(!ok)return;$("#personalNoteText").value="";await writePersonalNote(currentPersonalNoteKey,"");noteStatus("Private note deleted.");}
+function toggleNoteDictation(){const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!Recognition){sysAlert("Dictation is not available in this browser. You can still use your keyboard or the microphone on your device keyboard.","Dictation unavailable");return;}if(noteRecognition){stopNoteDictation();noteStatus("Dictation stopped. Your text was saved privately.");schedulePersonalNoteSave();return;}const recognition=new Recognition();noteRecognition=recognition;recognition.lang=$("#voiceChoice")?.value==="it-IT"?"it-IT":"en-US";recognition.continuous=true;recognition.interimResults=false;recognition.onresult=e=>{let added="";for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)added+=e.results[i][0].transcript+" ";if(added){const text=$("#personalNoteText");text.value+=(text.value&& !/\s$/.test(text.value)?" ":"")+added.trim();schedulePersonalNoteSave();}};recognition.onerror=()=>{noteStatus("Dictation stopped. You can continue typing.");stopNoteDictation();};recognition.onend=()=>{if(noteRecognition===recognition)stopNoteDictation();};recognition.start();$("#noteDictate").textContent="■ Stop dictation";noteStatus("Dictation is listening…");}
 async function shareDay(n){const d=DATA.days.find(day=>day.n===Number(n));if(!d)return;const text=["Day "+d.n+" — "+d.title,d.location,d.hotel,d.meals,"Activities:",...(d.items||[])].filter(Boolean).join("\n");try{if(navigator.share){await navigator.share({title:"Sicily · Day "+d.n,text});toast("Day shared");}else if(navigator.clipboard){await navigator.clipboard.writeText(text);toast("Day copied to clipboard");}else{await sysAlert(text,"Copy this day summary");}}catch(e){if(e.name!=="AbortError")toast("Could not share this day");}}
 function setReaderFont(delta){
   const root=document.documentElement,current=Number(root.dataset.textScale||"1"),next=Math.max(.9,Math.min(1.35,Math.round((current+delta)*100)/100));
@@ -3154,8 +3178,8 @@ function refreshHome(){
 /* ============ admin ============ */
 let adminUnlocked=false;
 let adminNewRecipe=false;
-const BACKUP_VERSION=3;
-const DATA_SCHEMA_VERSION=3;
+const BACKUP_VERSION=4;
+const DATA_SCHEMA_VERSION=4;
 const MIN_SUPPORTED_BACKUP_VERSION=1;
 async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));
   return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("");}
@@ -3182,6 +3206,16 @@ function validBackupData(data){
   const validReference=r=>r && typeof r.title==="string" && typeof r.kind==="string";
   return data.days.every(validDay) && data.recipes.every(validRecipe) && data.guides.every(validGuide) && data.reference.every(validReference);
 }
+function idSlug(value){return String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48)||"item";}
+function ensureContentIdsFor(data){
+  const used=new Set();
+  const assign=(item,prefix,seed)=>{if(!item||typeof item!=="object")return;let id=typeof item.id==="string"&&item.id.trim()?item.id.trim():prefix+"-"+idSlug(seed);let n=2,base=id;while(used.has(id))id=base+"-"+(n++);used.add(id);item.id=id;};
+  (data.days||[]).forEach((d,i)=>assign(d,"day",d.n||i+1));
+  (data.recipes||[]).forEach((r,i)=>assign(r,"recipe",(r.name||"recipe")+"-"+(i+1)));
+  (data.info||[]).forEach((p,i)=>assign(p,"info",(p.title||"info")+"-"+(i+1)));
+  (data.reference||[]).forEach((r,i)=>assign(r,"reference",(r.title||"reference")+"-"+(i+1)));
+  (data.guides||[]).forEach((g,i)=>assign(g,"guide",(g.city||"guide")+"-"+(g.cat||"")+"-"+(i+1)));
+}
 function migrateBackupData(rawData,sourceVersion){
   if(!rawData||typeof rawData!=="object")throw new Error("Backup data is missing.");
   let data=JSON.parse(JSON.stringify(rawData)),version=Number(sourceVersion)||1;
@@ -3194,9 +3228,13 @@ function migrateBackupData(rawData,sourceVersion){
     }else if(version===2){
       (data.guides||[]).forEach(g=>(g.entries||[]).forEach(e=>{if(e.type!=="place"&&e.type!=="restaurant")e.type=/food|eat something|free time & eat|gastronomy|restaurant|pizza|dining/.test(String(g.cat||"").toLowerCase())?"restaurant":"place";}));
       version=3;
+    }else if(version===3){
+      ensureContentIdsFor(data);
+      version=4;
     }
   }
   if(data.trip&&typeof data.trip==="object"){if(typeof data.trip.subtitle!=="string")data.trip.subtitle="";if(typeof data.trip.endLabel!=="string")data.trip.endLabel="";}
+  ensureContentIdsFor(data);
   data.schemaVersion=DATA_SCHEMA_VERSION;
   return {data,from:Number(sourceVersion)||1,migrated:(Number(sourceVersion)||1)!==DATA_SCHEMA_VERSION};
 }
@@ -3357,7 +3395,7 @@ function allGuideEntries(){
   const out=[]; DATA.guides.forEach((g,gi)=>g.entries.forEach((e,ei)=>out.push({g,gi,ei,e}))); return out;
 }
 function legacyRestaurantCategory(category){return /food|eat something|free time & eat|gastronomy|restaurant|pizza|dining/.test(String(category||'').toLowerCase());}
-function normalizeGuideTypes(){(DATA.guides||[]).forEach(g=>(g.entries||[]).forEach(e=>{if(e.type!=="place"&&e.type!=="restaurant")e.type=legacyRestaurantCategory(g.cat)?"restaurant":"place";}));DATA.schemaVersion=DATA_SCHEMA_VERSION;}
+function normalizeGuideTypes(){(DATA.guides||[]).forEach(g=>(g.entries||[]).forEach(e=>{if(e.type!=="place"&&e.type!=="restaurant")e.type=legacyRestaurantCategory(g.cat)?"restaurant":"place";}));ensureContentIdsFor(DATA);DATA.schemaVersion=DATA_SCHEMA_VERSION;}
 function isRestaurantEntry(g,e){return e&&e.type==='restaurant';}
 function catalogEntries(kind){return allGuideEntries().filter(x=>kind==='restaurant'?isRestaurantEntry(x.g,x.e):!isRestaurantEntry(x.g,x.e));}
 normalizeGuideTypes();
@@ -3494,9 +3532,15 @@ $("#btnContactHome").onclick=openContactPanel;
 $("#contactClose").onclick=closeContactPanel;
 $("#todayClose").onclick=closeTodayPanel;
 $("#userGuideClose").onclick=closeUserGuide;
+$("#noteClose").onclick=closePersonalNote;
+$("#noteCloseX").onclick=closePersonalNote;
+$("#noteDelete").onclick=deletePersonalNote;
+$("#noteDictate").onclick=toggleNoteDictation;
+$("#personalNoteText").addEventListener("input",schedulePersonalNoteSave);
 $("#todayPanel").addEventListener("click",e=>{if(e.target===$("#todayPanel"))closeTodayPanel();});
 $("#userGuidePanel").addEventListener("click",e=>{if(e.target===$("#userGuidePanel"))closeUserGuide();});
-$("#stage").addEventListener("click",e=>{const button=e.target.closest(".share-day");if(button){shareDay(button.dataset.day);return;}const audio=e.target.closest("[data-audio]");if(!audio)return;if(audio.dataset.audio==="play")playSpeech();else if(audio.dataset.audio==="pause")pauseSpeech();else if(audio.dataset.audio==="stop")stopSpeech();});
+$("#notePanel").addEventListener("click",e=>{if(e.target===$("#notePanel"))closePersonalNote();});
+$("#stage").addEventListener("click",e=>{const note=e.target.closest(".page-note-button");if(note){openPersonalNote(note.dataset.noteKey,note.dataset.noteLabel);return;}const button=e.target.closest(".share-day");if(button){shareDay(button.dataset.day);return;}const audio=e.target.closest("[data-audio]");if(!audio)return;if(audio.dataset.audio==="play")playSpeech();else if(audio.dataset.audio==="pause")pauseSpeech();else if(audio.dataset.audio==="stop")stopSpeech();});
 $("#voiceChoice").addEventListener("change",e=>{try{localStorage.setItem("sicilyBookletVoiceLanguage",e.target.value);}catch(err){};});
 $("#contactPanel").addEventListener("click",e=>{if(e.target===$("#contactPanel"))closeContactPanel();});
 $("#btnSearch").onclick=()=>openSearchPanel("");
