@@ -2029,8 +2029,6 @@ body *{font-family:var(--font-body)}
   .top .tbtn::after{content:attr(data-mobile-label);font:600 11px "Spectral",serif;letter-spacing:.01em;line-height:1}
   .top .tbtn svg{width:21px;height:21px}
   .top #btnToday{display:none}
-  .page-audio-controls{gap:6px;margin-bottom:13px;padding-bottom:11px}
-  .page-audio-controls button{flex:1;padding:7px 5px;font-size:12px}
 }
 
 .stage{flex:1;position:relative;overflow:hidden;padding:14px}
@@ -2048,11 +2046,12 @@ body *{font-family:var(--font-body)}
 @keyframes inR{from{transform:translateX(28px) rotateY(-6deg);opacity:0}to{transform:none;opacity:1}}
 @keyframes inL{from{transform:translateX(-28px) rotateY(6deg);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.page.enter-r,.page.enter-l{animation:none}}
-.page-audio-controls{display:flex;gap:7px;align-items:center;margin:0 0 16px;padding-bottom:13px;border-bottom:1px solid var(--line)}
-.page-audio-controls button{min-height:38px;border:1px solid var(--line-strong);border-radius:9px;background:var(--paper2);color:var(--ink);font:600 13px "Spectral",serif;padding:7px 11px;cursor:pointer}
+.page-topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 7px}.page-topline .kicker{margin:0}
+.page-audio-controls{display:flex;gap:4px;align-items:center;margin:0;padding:0;border:0;flex:0 0 auto}
+.page-audio-controls button{width:29px;height:29px;min-height:29px;border:1px solid var(--line-strong);border-radius:7px;background:var(--paper2);color:var(--ink);font:600 13px "Spectral",serif;padding:0;cursor:pointer}
 .page-audio-controls button[data-audio="play"]{background:var(--ink);color:#fff8ec;border-color:var(--ink)}
 .page-audio-controls button:disabled{opacity:.42;cursor:default}
-@media(max-width:620px){.page-audio-controls{gap:6px;margin-bottom:13px;padding-bottom:11px}.page-audio-controls button{flex:1;padding:7px 5px;font-size:12px}}
+@media(max-width:620px){.page-topline{gap:7px}.page-audio-controls{gap:3px}.page-audio-controls button{width:27px;height:27px;min-height:27px;font-size:12px}}
 
 .bottom{
   display:flex;align-items:center;gap:10px;padding:9px 14px 12px;
@@ -2740,7 +2739,7 @@ function tripRange(){
   return a.getDate()+" "+MONTHS[a.getMonth()].slice(0,3)+" \u2013 "+b.getDate()+" "+MONTHS[b.getMonth()].slice(0,3)+" "+b.getFullYear();
 }
 function esc(s){return (s==null?"":String(s)).replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));}
-function pageAudioControls(){return `<div class="page-audio-controls" role="group" aria-label="Audio controls"><button type="button" data-audio="play" aria-label="Play this page">▶ Play</button><button type="button" data-audio="pause" aria-label="Pause this page">Ⅱ Pause</button><button type="button" data-audio="stop" aria-label="Stop listening to this page">■ Stop</button></div>`;}
+function pageAudioControls(){return `<span class="page-audio-controls" role="group" aria-label="Audio controls"><button type="button" data-audio="play" aria-label="Play this page" title="Play">▶</button><button type="button" data-audio="pause" aria-label="Pause this page" title="Pause">Ⅱ</button><button type="button" data-audio="stop" aria-label="Stop listening to this page" title="Stop">■</button></span>`;}
 
 /* ============ modal system ============ */
 function sysAlert(msg,title){return new Promise(res=>{
@@ -2807,7 +2806,7 @@ function coverPage(){
 function infoPage(p){
   let s=p.sections.map(x=>`<div class="info-block"><h3>${esc(x.head)}</h3><p>${esc(x.body)}</p></div>`).join("");
   return {group:"Before you go", label:p.title, html:
-    `<div class="pg"><span class="kicker">Useful info</span><h2>${esc(p.title)}</h2>${s}</div>`};
+    `<div class="pg"><div class="page-topline"><span class="kicker">Useful info</span>${pageAudioControls()}</div><h2>${esc(p.title)}</h2>${s}</div>`};
 }
 function dayPage(d){
   const date=dayDate(d.n);
@@ -2818,9 +2817,8 @@ function dayPage(d){
     d.extra.map(x=>`<div class="extra-note"><p>${esc(x)}</p></div>`).join(""):"";
   return {group:"Day by day", label:"Day "+d.n+" \u2014 "+d.title, short:fmtShort(date), dayNumber:d.n, html:
     `<div class="pg">
-      <span class="kicker">Day ${d.n} of ${DATA.trip.days}</span>
+      <div class="page-topline"><span class="kicker">Day ${d.n} of ${DATA.trip.days}</span>${pageAudioControls()}</div>
       <h2>${esc(d.title)}</h2>
-      ${pageAudioControls()}
       <p class="hotel-line">${pinSvg()} ${esc(d.hotel)} &middot; ${esc(d.location)}</p>
       <div class="dateline">
         <span class="dl-day">Day ${d.n}</span>
@@ -2888,9 +2886,8 @@ function recipePage(r){
   const note=r.note?`<div class="rnote">${esc(r.note)}</div>`:"";
   return {group:"Recipes", label:r.name, html:
     `<div class="pg pg-recipe">
-      <span class="kicker">Recipe</span>
+      <div class="page-topline"><span class="kicker">Recipe</span>${pageAudioControls()}</div>
       <h2>${esc(r.name)}</h2>
-      ${pageAudioControls()}
       ${r.servings?`<div class="servings">${esc(r.servings)}</div>`:""}
       <div class="rule"></div>
       <div class="ing-h">Ingredients</div>
@@ -3081,22 +3078,30 @@ function renderSearchResults(query){
 }
 function openSearchPanel(value){const input=$("#readerSearch");input.value=value||"";renderSearchResults(input.value);$("#searchPanel").classList.add("on");$("#searchPanel").setAttribute("aria-hidden","false");setTimeout(()=>input.focus(),0);}
 function closeSearchPanel(){$("#searchPanel").classList.remove("on");$("#searchPanel").setAttribute("aria-hidden","true");}
-let speechUtterance=null;
+let speechUtterance=null,speechChunks=[],speechChunkIndex=0,speechPaused=false,speechRun=0;
 function speechAvailable(){return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;}
 function populateVoiceChoice(){const select=$("#voiceChoice");if(!select)return;const selected=localStorage.getItem("sicilyBookletVoiceLanguage")||"en-US";select.value=selected==="it-IT"?"it-IT":"en-US";}
-function updateAudioControls(){const active=speechAvailable()&&speechSynthesis.speaking,paused=active&&speechSynthesis.paused;document.querySelectorAll(".page-audio-controls").forEach(group=>{const play=group.querySelector('[data-audio="play"]'),pause=group.querySelector('[data-audio="pause"]'),stop=group.querySelector('[data-audio="stop"]');if(play)play.disabled=active&&!paused;if(pause)pause.disabled=!active||paused;if(stop)stop.disabled=!active;});}
+function updateAudioControls(){const active=!!speechUtterance||speechPaused;document.querySelectorAll(".page-audio-controls").forEach(group=>{const play=group.querySelector('[data-audio="play"]'),pause=group.querySelector('[data-audio="pause"]'),stop=group.querySelector('[data-audio="stop"]');if(play)play.disabled=active&&!speechPaused;if(pause)pause.disabled=!active||speechPaused;if(stop)stop.disabled=!active;});}
 function pageTextForSpeech(){const page=$("#stage .page");if(!page)return "";const copy=page.cloneNode(true);copy.querySelectorAll(".page-audio-controls").forEach(node=>node.remove());return (copy.innerText||copy.textContent||"").replace(/\s+/g," ").trim();}
-function stopSpeech(){if(!speechAvailable())return;speechSynthesis.cancel();speechUtterance=null;updateAudioControls();}
+function speechParts(text){return (text.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g)||[text]).map(x=>x.trim()).filter(Boolean);}
+function stopSpeech(){speechRun++;speechPaused=false;speechChunks=[];speechChunkIndex=0;if(speechAvailable())speechSynthesis.cancel();speechUtterance=null;updateAudioControls();}
+function speakCurrentPart(){
+  if(!speechChunks[speechChunkIndex]){speechUtterance=null;speechPaused=false;updateAudioControls();return;}
+  const run=speechRun,chosen=$("#voiceChoice")?.value==="it-IT"?"it-IT":"en-US",utterance=new SpeechSynthesisUtterance(speechChunks[speechChunkIndex]);
+  speechUtterance=utterance;utterance.lang=chosen;utterance.rate=.92;
+  const voice=speechSynthesis.getVoices().find(item=>item.lang.toLowerCase()===chosen.toLowerCase())||speechSynthesis.getVoices().find(item=>item.lang.toLowerCase().startsWith(chosen.slice(0,2).toLowerCase()));if(voice)utterance.voice=voice;
+  utterance.onend=()=>{if(run!==speechRun||speechPaused)return;speechChunkIndex++;speechUtterance=null;if(speechChunks[speechChunkIndex])speakCurrentPart();else updateAudioControls();};
+  utterance.onerror=()=>{if(run!==speechRun)return;speechUtterance=null;speechPaused=false;updateAudioControls();toast("Listening stopped");};
+  speechSynthesis.speak(utterance);updateAudioControls();
+}
 function playSpeech(){
   if(!speechAvailable()){sysAlert("Text-to-speech is not available in this browser.","Listening unavailable");return;}
-  if(speechSynthesis.speaking&&speechSynthesis.paused){speechSynthesis.resume();updateAudioControls();return;}
+  if(speechPaused&&speechChunks.length){speechPaused=false;speechRun++;speakCurrentPart();return;}
+  if(speechUtterance)return;
   const text=pageTextForSpeech();if(!text){toast("There is no page text to read");return;}
-  stopSpeech();speechUtterance=new SpeechSynthesisUtterance(text);const chosen=$("#voiceChoice")?.value==="it-IT"?"it-IT":"en-US";speechUtterance.lang=chosen;speechUtterance.rate=.92;
-  const voice=speechSynthesis.getVoices().find(item=>item.lang.toLowerCase()===chosen.toLowerCase())||speechSynthesis.getVoices().find(item=>item.lang.toLowerCase().startsWith(chosen.slice(0,2).toLowerCase()));if(voice)speechUtterance.voice=voice;
-  speechUtterance.onstart=updateAudioControls;speechUtterance.onend=()=>{speechUtterance=null;updateAudioControls();};speechUtterance.onerror=()=>{speechUtterance=null;updateAudioControls();toast("Listening stopped");};
-  speechSynthesis.speak(speechUtterance);updateAudioControls();
+  stopSpeech();speechChunks=speechParts(text);speechChunkIndex=0;speechRun++;speakCurrentPart();
 }
-function pauseSpeech(){if(speechAvailable()&&speechSynthesis.speaking&&!speechSynthesis.paused){speechSynthesis.pause();updateAudioControls();}}
+function pauseSpeech(){if(!speechAvailable()||!speechUtterance)return;speechPaused=true;speechRun++;speechSynthesis.cancel();speechUtterance=null;updateAudioControls();}
 
 /* swipe */
 (function(){
@@ -3149,7 +3154,9 @@ function refreshHome(){
 /* ============ admin ============ */
 let adminUnlocked=false;
 let adminNewRecipe=false;
-const BACKUP_VERSION=2;
+const BACKUP_VERSION=3;
+const DATA_SCHEMA_VERSION=3;
+const MIN_SUPPORTED_BACKUP_VERSION=1;
 async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));
   return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("");}
 function downloadBlob(name,text,type="application/json"){
@@ -3158,7 +3165,8 @@ function downloadBlob(name,text,type="application/json"){
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function backupPayload(){
-  return {backupVersion:BACKUP_VERSION,app:"sicily-booklet",exportedAt:new Date().toISOString(),data:JSON.parse(JSON.stringify(DATA))};
+  DATA.schemaVersion=DATA_SCHEMA_VERSION;
+  return {backupVersion:BACKUP_VERSION,dataVersion:DATA_SCHEMA_VERSION,app:"sicily-booklet",exportedAt:new Date().toISOString(),data:JSON.parse(JSON.stringify(DATA))};
 }
 function downloadBackup(filename){
   const name=filename||("sicily-booklet-backup-"+new Date().toISOString().slice(0,10)+".json");
@@ -3174,23 +3182,42 @@ function validBackupData(data){
   const validReference=r=>r && typeof r.title==="string" && typeof r.kind==="string";
   return data.days.every(validDay) && data.recipes.every(validRecipe) && data.guides.every(validGuide) && data.reference.every(validReference);
 }
+function migrateBackupData(rawData,sourceVersion){
+  if(!rawData||typeof rawData!=="object")throw new Error("Backup data is missing.");
+  let data=JSON.parse(JSON.stringify(rawData)),version=Number(sourceVersion)||1;
+  if(!Number.isInteger(version)||version<1)throw new Error("Backup data version is invalid.");
+  if(version>DATA_SCHEMA_VERSION)throw new Error("This backup was created by a newer version of the app.");
+  while(version<DATA_SCHEMA_VERSION){
+    if(version===1){
+      if(data.trip&&typeof data.trip==="object"){if(typeof data.trip.subtitle!=="string")data.trip.subtitle="";if(typeof data.trip.endLabel!=="string")data.trip.endLabel="";}
+      version=2;
+    }else if(version===2){
+      (data.guides||[]).forEach(g=>(g.entries||[]).forEach(e=>{if(e.type!=="place"&&e.type!=="restaurant")e.type=/food|eat something|free time & eat|gastronomy|restaurant|pizza|dining/.test(String(g.cat||"").toLowerCase())?"restaurant":"place";}));
+      version=3;
+    }
+  }
+  if(data.trip&&typeof data.trip==="object"){if(typeof data.trip.subtitle!=="string")data.trip.subtitle="";if(typeof data.trip.endLabel!=="string")data.trip.endLabel="";}
+  data.schemaVersion=DATA_SCHEMA_VERSION;
+  return {data,from:Number(sourceVersion)||1,migrated:(Number(sourceVersion)||1)!==DATA_SCHEMA_VERSION};
+}
 const ADMIN_DRAFT_KEY="sicilyBookletAdminDraftV1";
 let draftTimer=null;
 let draftCheckedThisSession=false;
 function draftRecord(){try{return JSON.parse(localStorage.getItem(ADMIN_DRAFT_KEY)||"null");}catch(e){return null;}}
 function updateDraftStatus(){const status=$("#draftStatus"),draft=draftRecord();if(!status)return;status.textContent=draft?"Local draft saved: "+new Date(draft.savedAt).toLocaleString():"No unsaved local draft.";}
 function saveAdminDraft(){
-  try{localStorage.setItem(ADMIN_DRAFT_KEY,JSON.stringify({version:1,savedAt:Date.now(),data:DATA}));updateDraftStatus();}catch(e){}
+  try{DATA.schemaVersion=DATA_SCHEMA_VERSION;localStorage.setItem(ADMIN_DRAFT_KEY,JSON.stringify({version:2,dataVersion:DATA_SCHEMA_VERSION,savedAt:Date.now(),data:DATA}));updateDraftStatus();}catch(e){}
 }
 function scheduleDraft(){clearTimeout(draftTimer);draftTimer=setTimeout(saveAdminDraft,350);}
 function clearAdminDraft(){try{localStorage.removeItem(ADMIN_DRAFT_KEY);}catch(e){} updateDraftStatus();}
 async function restoreAdminDraftIfAvailable(){
   if(draftCheckedThisSession)return;
   draftCheckedThisSession=true;
-  const draft=draftRecord();if(!draft||draft.version!==1||!validBackupData(draft.data))return;
+  const draft=draftRecord();if(!draft||![1,2].includes(draft.version))return;
+  let migrated;try{migrated=migrateBackupData(draft.data,draft.dataVersion||draft.data?.schemaVersion||draft.version);}catch(e){clearAdminDraft();return;}if(!validBackupData(migrated.data)){clearAdminDraft();return;}
   const when=new Date(draft.savedAt).toLocaleString();
   const restore=await sysConfirm("A local draft from "+when+" was found. Restore it?","Restore draft","Restore");
-  if(restore){const currentHash=DATA.adminHash;DATA=JSON.parse(JSON.stringify(draft.data));if(!DATA.adminHash)DATA.adminHash=currentHash;toast("Local draft restored");}
+  if(restore){const currentHash=DATA.adminHash;DATA=migrated.data;if(!DATA.adminHash)DATA.adminHash=currentHash;toast(migrated.migrated?"Local draft restored and updated":"Local draft restored");}
   else clearAdminDraft();
 }
 async function restoreBackupFile(file){
@@ -3199,18 +3226,19 @@ async function restoreBackupFile(file){
     if(!obj || obj.app!=="sicily-booklet"){
       await sysAlert("This file is not a valid Sicily booklet backup.","Invalid backup"); return;
     }
-    if(obj.backupVersion!==BACKUP_VERSION){await sysAlert("This backup uses an unsupported data version. It cannot be restored safely.","Unsupported backup");return;}
-    if(!validBackupData(obj.data)){await sysAlert("This backup is incomplete or has an invalid structure. No data has been changed.","Invalid backup");return;}
+    if(!Number.isInteger(obj.backupVersion)||obj.backupVersion<MIN_SUPPORTED_BACKUP_VERSION||obj.backupVersion>BACKUP_VERSION){await sysAlert("This backup was created by an unsupported version of the app. No data has been changed.","Unsupported backup");return;}
+    let migrated;try{migrated=migrateBackupData(obj.data,obj.dataVersion||obj.data?.schemaVersion||obj.backupVersion);}catch(err){await sysAlert("This backup cannot be updated safely: "+err.message,"Unsupported backup");return;}
+    if(!validBackupData(migrated.data)){await sysAlert("This backup is incomplete or has an invalid structure. No data has been changed.","Invalid backup");return;}
     downloadBackup("sicily-booklet-safety-"+new Date().toISOString().slice(0,10)+".json");
     const ok=await sysConfirm("Restore this backup and replace the current editable data? A safety copy has just been downloaded.","Restore backup","Restore");
     if(!ok)return;
     const currentAdminHash=DATA.adminHash;
-    DATA=JSON.parse(JSON.stringify(obj.data));
+    DATA=migrated.data;
     // Older valid backups may not contain credentials: never leave the Admin inaccessible.
     if(typeof DATA.adminHash!=="string" || !DATA.adminHash)DATA.adminHash=currentAdminHash;
     refreshHome(); fillAdmin();
     if(curBook==="recipes") openBook("recipes"); else if(curBook==="booklet") openBook("booklet");
-    toast("Backup restored");
+    toast(migrated.migrated?"Backup restored and updated to the current format":"Backup restored");
   }catch(err){await sysAlert("Could not read this backup: "+err.message,"Restore failed");}
 }
 async function tryOpenAdmin(){
@@ -3329,7 +3357,7 @@ function allGuideEntries(){
   const out=[]; DATA.guides.forEach((g,gi)=>g.entries.forEach((e,ei)=>out.push({g,gi,ei,e}))); return out;
 }
 function legacyRestaurantCategory(category){return /food|eat something|free time & eat|gastronomy|restaurant|pizza|dining/.test(String(category||'').toLowerCase());}
-function normalizeGuideTypes(){(DATA.guides||[]).forEach(g=>(g.entries||[]).forEach(e=>{if(e.type!=="place"&&e.type!=="restaurant")e.type=legacyRestaurantCategory(g.cat)?"restaurant":"place";}));}
+function normalizeGuideTypes(){(DATA.guides||[]).forEach(g=>(g.entries||[]).forEach(e=>{if(e.type!=="place"&&e.type!=="restaurant")e.type=legacyRestaurantCategory(g.cat)?"restaurant":"place";}));DATA.schemaVersion=DATA_SCHEMA_VERSION;}
 function isRestaurantEntry(g,e){return e&&e.type==='restaurant';}
 function catalogEntries(kind){return allGuideEntries().filter(x=>kind==='restaurant'?isRestaurantEntry(x.g,x.e):!isRestaurantEntry(x.g,x.e));}
 normalizeGuideTypes();
