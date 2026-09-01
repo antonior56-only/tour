@@ -1,5 +1,5 @@
-const CACHE_NAME = "sicily-booklet-v2";
-const CORE_FILES = ["./sicily-booklet_6-guides.html", "sicily-booklet.webmanifest", "sicily-icon.svg", "sicily-icon-192.png", "sicily-icon-512.png"];
+const CACHE_NAME = "sicily-booklet-v3";
+const CORE_FILES = ["./index.html", "sicily-booklet.webmanifest", "sicily-icon.svg", "sicily-icon-192.png", "sicily-icon-512.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_FILES)).then(() => self.skipWaiting()));
@@ -12,5 +12,5 @@ self.addEventListener("message", event => {
 });
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(response => { const copy = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)); return response; }).catch(() => caches.match("./sicily-booklet_6-guides.html"))));
+  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(response => { const copy = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)); return response; }).catch(() => caches.match("./index.html"))));
 });
