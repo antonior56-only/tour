@@ -2444,8 +2444,6 @@ ol.plan li::before{
 
     <div class="home-foot">
       <span id="footLeader">&nbsp;</span>
-      <span class="dot">&bull;</span>
-      <button class="abtn ghost" id="homeAdminHint" style="font-size:12px;padding:2px 6px;border:0;color:var(--ink-soft);cursor:pointer">Tour leader tools</button>
     </div>
   </section>
 
@@ -2551,7 +2549,7 @@ ol.plan li::before{
           <h5>1. Prima regola: dati, bozza e pubblicazione</h5>
           <p>Le modifiche avvengono nella copia di lavoro aperta nel browser. La <b>bozza locale</b> salva automaticamente il lavoro su questo dispositivo; è una protezione contro refresh o chiusure accidentali, non sostituisce il backup. Per distribuire le modifiche ai viaggiatori devi sempre usare <b>Generate updated file</b> e sostituire/pubblicare il nuovo HTML.</p>
           <h5>2. Accesso e dashboard</h5>
-          <p>Dalla Home apri <b>Tour leader tools</b> e inserisci la password. Le sezioni sono inizialmente chiuse: apri solo quella necessaria. La Dashboard riassume il numero di giorni, luoghi, ristoranti, vini e ricette; indica anche bozza e ultimo backup locale. <b>Undo last change</b> annulla una delle ultime 20 modifiche della sessione corrente.</p>
+          <p>Dalla Home tocca quattro volte consecutive il titolo principale e inserisci la password. Le sezioni sono inizialmente chiuse: apri solo quella necessaria. La Dashboard riassume il numero di giorni, luoghi, ristoranti, vini e ricette; indica anche bozza e ultimo backup locale. <b>Undo last change</b> annulla una delle ultime 20 modifiche della sessione corrente.</p>
           <h5>3. Impostazioni e itinerario</h5>
           <p>In <b>Trip &amp; dates</b> aggiorna data di arrivo, titolo e contatti della guida. La data del Giorno 1 ricalcola automaticamente le date. In <b>Itinerary</b> scegli un giorno e modifica titolo, hotel, località, pasti, testo introduttivo, attività e note. Le attività e le note vanno inserite una per riga. Usa Move up/down per cambiare l’ordine; aggiungere o eliminare giorni rinumera l’itinerario.</p>
           <h5>4. Ricette, luoghi e ristoranti</h5>
@@ -3607,7 +3605,6 @@ $("#readerSearch").addEventListener("input",e=>renderSearchResults(e.target.valu
 $("#quickSearch").addEventListener("input",e=>{const q=e.target.value;if(q.trim().length>=2)openSearchPanel(q);});
 $("#drawerClose").onclick=()=>$("#drawer").classList.remove("on");
 $("#drawerScrim").onclick=()=>$("#drawer").classList.remove("on");
-$("#homeAdminHint").onclick=tryOpenAdmin;
 $("#adminBack").onclick=()=>{ commitTrip(); commitDay(); commitRecipe(); commitCatalog("place"); commitCatalog("restaurant"); commitWine(); $("#admin").classList.remove("on"); goHome(); };
 
 $("#fStart").addEventListener("input",()=>{updateDatePreview();commitTrip();});
@@ -3671,7 +3668,7 @@ restoreReaderFont();
 populateVoiceChoice();
 if(speechAvailable())speechSynthesis.onvoiceschanged=populateVoiceChoice;
 
-/* hidden 4-tap access on the home title, in addition to the visible button */
+/* hidden 4-tap access on the home title */
 (function(){
   let click=0,timer=null;
   const title=$("#homeTitle");
