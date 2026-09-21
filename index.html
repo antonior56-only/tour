@@ -2252,6 +2252,9 @@ ol.plan li::before{
 #admin.on{display:flex}
 #admin .ahead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:linear-gradient(#f3eddf,#efe7d6)}
 #admin .ahead b{flex:1;font-family:"Fraunces",serif;font-weight:500;font-size:18px}
+#admin .admin-home-btn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 11px;border:1px solid var(--line-strong);border-radius:9px;background:var(--paper2);color:var(--ink);font:600 13px var(--font-body);cursor:pointer}
+#admin .admin-home-btn svg{width:18px;height:18px}
+#admin .admin-home-btn:active{transform:scale(.97)}
 #admin .abody{flex:1;overflow-y:auto;padding:18px 16px 40px}
 .aupdated{font-size:12px;color:var(--ink-soft);margin:-4px 0 16px}
 .asec{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
@@ -2508,8 +2511,9 @@ ol.plan li::before{
   <!-- ===== ADMIN ===== -->
   <section id="admin">
     <div class="ahead">
-      <button class="tbtn" id="adminBack">
+      <button class="admin-home-btn" id="adminBack" type="button" aria-label="Close Admin and return to Home" title="Close Admin and return to Home">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M15 6l-9 6 9 6"/></svg>
+        <span>Home</span>
       </button>
       <b>Tour leader tools</b>
     </div>
